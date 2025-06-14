@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Nervoso Autônomo: Uma Análise Interativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* == Vibrant Theme Colors == */
+            --simpatico-color: #f43f5e;      /* Vibrant Rose */
+            --parassimpatico-color: #3b82f6; /* Vibrant Blue */
+            --common-color: #84cc16;        /* Vibrant Lime */
+
+            /* Glow/Highlight Colors for light theme */
+            --simpatico-glow: rgba(244, 63, 94, 0.2);
+            --parassimpatico-glow: rgba(59, 130, 246, 0.2);
+            --common-glow: rgba(132, 204, 22, 0.2);
+            
+            /* Theme Border Colors for light theme */
+            --simpatico-border: rgba(244, 63, 94, 0.4);
+            --parassimpatico-border: rgba(59, 130, 246, 0.4);
+            --common-border: rgba(132, 204, 22, 0.4);
+
+            /* Light Theme Palette */
+            --bg-main: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+        }
+
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-primary);
+            overflow-x: hidden;
+            background-color: var(--bg-main);
+            transition: background-color 0.5s ease-in-out; /* For quiz feedback */
+        }
+        
+        /* == Background color flash for Quiz == */
+        body.correct-bg { background-color: #dcfce7; }
+        body.incorrect-bg { background-color: #fee2e2; }
+
+        /* Animated background shapes */
+        .background-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -2;
+        }
+        .light-bubble {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.15; 
+            animation: moveBubble 35s infinite alternate;
+        }
+        .light-bubble.b1 { width: 45vw; height: 45vw; top: 5%; left: -10%; background: var(--parassimpatico-color); animation-duration: 40s; }
+        .light-bubble.b2 { width: 45vw; height: 45vw; top: 40%; left: 70%; background: var(--simpatico-color); animation-duration: 35s; }
+        .light-bubble.b3 { width: 50vw; height: 50vw; top: 60%; left: 10%; background: var(--common-color); animation-duration: 45s; }
+
+        @keyframes moveBubble {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(15vw, -20vh) scale(1.2); }
+        }
+        
+        /* UPDATED: Dynamic background glows for transitions */
+        .dynamic-bg-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 150vmax;
+            height: 150vmax;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            z-index: -1;
+        }
+        #bg-common { background-color: var(--common-color); }
+        #bg-simpatico { background-color: var(--simpatico-color); }
+        #bg-parassimpatico { background-color: var(--parassimpatico-color); }
+
+
+        .section-container {
+            width: 100%;
+            padding: 7rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+        
+        #hero { 
+            min-height: 90vh; 
+            padding-top: 2rem; 
+            padding-bottom: 2rem;
+        }
+        #hero h1 { 
+            font-size: clamp(2.8rem, 7vw, 5rem); 
+            font-weight: 800; 
+            letter-spacing: -0.05em; 
+            text-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+        #hero p { 
+            font-size: clamp(1.1rem, 2.5vw, 1.35rem); 
+            max-width: 650px; 
+            color: var(--text-secondary);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-header-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 1200px;
+            width: 100%;
+            overflow: hidden;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .section-header-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .section-header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.6);
+            z-index: 1;
+        }
+        .section-header-card > * {
+             position: relative;
+             z-index: 2;
+        }
+        .section-header-card .section-title {
+            margin-bottom: 1rem;
+        }
+        #hero .section-header-card { margin-bottom: 0; } 
+
+        .section-title { font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; color: var(--text-primary); position: relative; }
+        .section-subtitle { 
+            font-size: clamp(1rem, 2vw, 1.2rem); 
+            max-width: 700px; 
+            color: var(--text-secondary); 
+            margin-bottom: 0;
+            margin-left: auto; 
+            margin-right: auto; 
+        }
+
+        .topics-grid {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .topic-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1.5rem;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+        }
+        
+        .topic-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        .topic-card:nth-child(1) { transition-delay: 0.05s; }
+        .topic-card:nth-child(2) { transition-delay: 0.1s; }
+        .topic-card:nth-child(3) { transition-delay: 0.15s; }
+        .topic-card:nth-child(4) { transition-delay: 0.2s; }
+        .topic-card:nth-child(5) { transition-delay: 0.25s; }
+        .topic-card:nth-child(6) { transition-delay: 0.3s; }
+
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.6);
+            transition: box-shadow 0.4s ease;
+            z-index: 1;
+        }
+        
+        .topic-card:hover::before { 
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .topic-card > div {
+            position: relative;
+            z-index: 2;
+        }
+
+        .topic-card:hover { 
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3); 
+        }
+        
+        .topic-card .summary { 
+            color: var(--text-primary);
+            text-shadow: none;
+            font-size: 1.125rem; 
+            font-weight: 600; 
+            padding: 1.5rem; 
+            cursor: pointer; 
+            outline: none; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .topic-card .summary::after { 
+            content: '+'; 
+            font-size: 1.5rem; 
+            font-weight: 400; 
+            color: var(--text-secondary);
+            text-shadow: none;
+            transition: transform 0.3s ease-in-out; 
+        }
+        .topic-card.is-open > .summary::after { transform: rotate(45deg); }
+        .topic-card.is-open > .summary { 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+        }
+        
+        .topic-content-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .topic-content { 
+            padding: 1.5rem; 
+            font-size: 0.95rem; 
+            color: var(--text-secondary);
+            text-shadow: none;
+        }
+        
+        #common .topic-card.is-open {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08), inset 0 0 0 2px var(--common-border);
+        }
+        #simpatico .topic-card.is-open {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08), inset 0 0 0 2px var(--simpatico-border);
+        }
+        #parassimpatico .topic-card.is-open {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08), inset 0 0 0 2px var(--parassimpatico-border);
+        }
+        
+        #common .topic-card.is-open:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1), inset 0 0 0 2px rgba(132, 204, 22, 0.6);
+        }
+        #simpatico .topic-card.is-open:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1), inset 0 0 0 2px rgba(244, 63, 94, 0.6);
+        }
+        #parassimpatico .topic-card.is-open:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1), inset 0 0 0 2px rgba(59, 130, 246, 0.6);
+        }
+        
+        .term { 
+            text-decoration: none; 
+            cursor: pointer; 
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 0.6rem;
+            transition: all 0.2s ease-in-out;
+            text-shadow: none;
+        }
+        #common .term { background-color: var(--common-glow); color: #4d7c0f; }
+        #simpatico .term { background-color: var(--simpatico-glow); color: #9d174d; }
+        #parassimpatico .term { background-color: var(--parassimpatico-glow); color: #1d4ed8; }
+        .term:hover { 
+            filter: brightness(1.15); 
+        }
+
+        /* Modal Styling */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(248, 250, 252, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+            z-index: 1000;
+        }
+        #modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.4s ease;
+        }
+        
+        #modal-content {
+            background: rgba(255, 255, 255, 0.55); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            border-radius: 2rem;
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            transform: scale(0.95);
+            transition: transform 0.4s ease;
+            overflow: hidden; 
+        }
+        
+        #modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.6);
+            z-index: 1;
+        }
+
+        #modal-overlay.visible #modal-content { 
+            transform: scale(1);
+        }
+        
+        #modal-content.theme-common { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), inset 0 0 0 2px var(--common-border); }
+        #modal-content.theme-simpatico { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), inset 0 0 0 2px var(--simpatico-border); }
+        #modal-content.theme-parassimpatico { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), inset 0 0 0 2px var(--parassimpatico-border); }
+        
+        #modal-header, #modal-description {
+            position: relative;
+            z-index: 2;
+        }
+
+        #modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            text-align: center;
+            padding: 1.5rem 3.5rem;
+        }
+        
+        #modal-title { 
+            font-size: 1.75rem; 
+            font-weight: 700; 
+            text-shadow: none;
+        }
+        #modal-header.theme-common #modal-title { color: var(--common-color); }
+        #modal-header.theme-simpatico #modal-title { color: var(--simpatico-color); }
+        #modal-header.theme-parassimpatico #modal-title { color: var(--parassimpatico-color); }
+        
+        #modal-description { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; padding: 1.5rem 2rem 2rem 2rem; }
+        
+        #modal-close-btn {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: rgba(0,0,0,0.05);
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem; height: 2.5rem;
+            cursor: pointer; 
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            z-index: 3;
+        }
+        #modal-close-btn:hover { background: rgba(0,0,0,0.1); transform: scale(1.1); }
+        
+        .footer-signature { text-align: center; padding: 4rem 1rem; background-color: transparent; color: #94a3b8; }
+        ul { list-style-position: inside; padding-left: 0.5rem;}
+        li { margin-bottom: 0.5rem; }
+
+        /* == Quiz Styles == */
+        #quiz-section {
+             background: rgba(255, 255, 255, 0.2);
+             backdrop-filter: blur(15px);
+             -webkit-backdrop-filter: blur(15px);
+             border-top: 1px solid rgba(255, 255, 255, 0.3);
+             padding-bottom: 4rem;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        #quiz-timer {
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        #quiz-question {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+        }
+
+        #quiz-options {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            background-color: rgba(255,255,255,0.7);
+            border: 2px solid transparent;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .quiz-option:hover {
+            transform: translateX(5px);
+            background-color: white;
+        }
+        
+        .quiz-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .quiz-option.correct-answer {
+            border-color: #22c55e; /* green-500 */
+            background-color: #f0fdf4; /* green-50 */
+            color: #15803d; /* green-700 */
+            font-weight: 600;
+        }
+        
+        .quiz-option.incorrect-answer {
+            border-color: #ef4444; /* red-500 */
+            background-color: #fef2f2; /* red-50 */
+            color: #b91c1c; /* red-700 */
+            font-weight: 600;
+        }
+
+        #quiz-start-btn, #restart-quiz-btn {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-weight: 700;
+            padding: 1rem 2.5rem;
+            border-radius: 1rem;
+            font-size: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        #quiz-start-btn {
+            color: var(--text-primary); /* Changed from --simpatico-color */
+        }
+        #restart-quiz-btn {
+            color: var(--parassimpatico-color);
+             margin-top: 2rem;
+        }
+
+        #quiz-start-btn:hover, #restart-quiz-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        #quiz-results {
+             text-align: center;
+        }
+        
+        #quiz-results h3 {
+             font-size: 2rem;
+             font-weight: 700;
+             margin-bottom: 1.5rem;
+        }
+
+        #quiz-percentage {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .results-stats {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .stat-correct, .stat-incorrect {
+            font-weight: 600;
+            color: var(--text-primary);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .stat-correct {
+            background-color: rgba(34, 197, 94, 0.25); 
+        }
+
+        .stat-incorrect {
+            background-color: rgba(239, 68, 68, 0.25);
+        }
+        
+        #missed-topics-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .missed-topic-bubble {
+            background-color: #f1f5f9;
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .missed-topic-bubble:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .missed-topic-bubble.visited-topic {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+            color: #166534;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <div class="light-bubble b1"></div>
+        <div class="light-bubble b2"></div>
+        <div class="light-bubble b3"></div>
+        <div class="dynamic-bg-glow" id="bg-common"></div>
+        <div class="dynamic-bg-glow" id="bg-simpatico"></div>
+        <div class="dynamic-bg-glow" id="bg-parassimpatico"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="section-container">
+        <div class="section-header-card">
+            <h1>O Maestro do Corpo: Desvendando o Sistema Nervoso Autônomo</h1>
+            <p class="mt-4">Uma exploração interativa das divisões Simpática e Parassimpática, que controlam as funções vitais do nosso corpo sem que percebamos.</p>
+        </div>
+    </section>
+    
+    <!-- Common Characteristics Section -->
+    <section id="common" class="section-container">
+        <div class="section-header-card">
+            <h2 class="section-title">O Controle Involuntário</h2>
+            <p class="section-subtitle">O Sistema Nervoso Autônomo (SNA) é a divisão do sistema nervoso que regula as funções corporais automáticas, como batimentos cardíacos, digestão e pressão arterial, mantendo a homeostasia.</p>
+        </div>
+        <div class="topics-grid">
+            <div class="topic-card" id="topic-estrutura-geral-do-sna">
+                <div class="summary">Estrutura Geral do SNA</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Composto por duas vias neuronais em série: um neurônio pré-ganglionar e um pós-ganglionar.</li>
+                            <li><span class="term" data-description="O primeiro neurônio da via, cujo corpo celular está no SNC (tronco encefálico ou medula espinhal). Seu axônio se projeta para um gânglio autonômico. Geralmente é mielinizado.">Neurônio Pré-ganglionar</span></li>
+                            <li><span class="term" data-description="O segundo neurônio, cujo corpo celular está em um gânglio autonômico. Seu axônio (geralmente não mielinizado) inerva o órgão-alvo (músculo liso, cardíaco ou glândula).">Neurônio Pós-ganglionar</span></li>
+                             <li><span class="term" data-description="Um agrupamento de corpos celulares de neurônios fora do SNC, funcionando como uma 'estação de retransmissão' para os sinais autonômicos, onde o neurônio pré-ganglionar se comunica com o pós-ganglionar.">Gânglio Autonômico</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-controle-antagonista">
+                <div class="summary">Controle Antagonista</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>A maioria dos órgãos internos recebe inervação tanto da divisão simpática quanto da parassimpática.</li>
+                            <li>Uma divisão ativa uma resposta enquanto a outra a inibe. Pense no simpático como o 'acelerador' e no parassimpático como o 'freio' do corpo.</li>
+                            <li><span class="term" data-description="É o equilíbrio dinâmico e constante entre as atividades simpática e parassimpática que permite um controle preciso e rápido das funções corporais, adaptando-as às necessidades do momento.">Balanço Autonômico</span>: a chave da <span class="term" data-description="A tendência do corpo de manter um ambiente interno estável e relativamente constante (temperatura, pH, pressão arterial, etc.), apesar das mudanças no ambiente externo. É o objetivo principal do SNA.">homeostasia</span>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-centros-de-controle">
+                <div class="summary">Centros de Controle</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Embora o SNA seja 'autônomo', ele é regulado por áreas superiores do cérebro.</li>
+                            <li><span class="term" data-description="O principal centro de integração do SNA. Controla funções como temperatura corporal, sede, fome e respostas emocionais que envolvem o SNA.">Hipotálamo</span>: O comandante geral.</li>
+                            <li><span class="term" data-description="Contém núcleos vitais que regulam diretamente a pressão arterial, os batimentos cardíacos, a respiração e a digestão, como o bulbo e a ponte.">Tronco Encefálico</span>: Controle direto.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-neurotransmissores-e-receptores">
+                <div class="summary">Neurotransmissores e Receptores</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>A comunicação do SNA depende de moléculas químicas.</li>
+                            <li><span class="term" data-description="Moléculas mensageiras liberadas por neurônios para transmitir um sinal a outra célula através de uma sinapse. Os principais no SNA são a Acetilcolina (ACh) e a Norepinefrina (NE).">Neurotransmissores</span>: Os mensageiros.</li>
+                            <li><span class="term" data-description="Proteínas na superfície da célula-alvo que funcionam como 'fechaduras'. Quando o neurotransmissor (a 'chave') se liga, ele desencadeia uma resposta específica dentro da célula.">Receptores</span>: As fechaduras.</li>
+                            <li>Os neurônios são classificados como <span class="term" data-description="Refere-se a neurônios que sintetizam e liberam Acetilcolina (ACh).">colinérgicos</span> (liberam ACh) ou <span class="term" data-description="Refere-se a neurônios que sintetizam e liberam Norepinefrina (NE). Também se aplica a receptores que respondem a NE ou Epinefrina.">adrenérgicos</span> (liberam NE).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="topic-card" id="topic-controle-tonico">
+                <div class="summary">Controle Tônico</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>É um controle que regula parâmetros fisiológicos em um padrão "aumenta-diminui", como um dimmer de luz.</li>
+                            <li>O sinal está sempre ativo (<span class="term" data-description="Nível basal de atividade nervosa que mantém um estado de contração parcial nos vasos sanguíneos, permitindo que eles contraiam ou relaxem a partir desse ponto.">tônus</span>), mas sua intensidade (frequência) muda.</li>
+                            <li>Ex: O tônus simpático nos vasos sanguíneos. Uma frequência aumentada causa <span class="term" data-description="Contração do músculo liso vascular, diminuindo o diâmetro do vaso e aumentando a pressão arterial.">vasoconstrição</span>; uma diminuída causa <span class="term" data-description="Relaxamento do músculo liso vascular, aumentando o diâmetro do vaso e diminuindo a pressão.">vasodilatação</span>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-juncao-neuroefetora">
+                <div class="summary">Junção Neuroefetora</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>A <span class="term" data-description="É o ponto de comunicação entre o neurônio autonômico e a célula-alvo (efetora).">sinapse</span> entre um neurônio autonômico e seu órgão-alvo.</li>
+                            <li>Diferente da JNM, o neurônio pós-ganglionar possui <span class="term" data-description="Dilatações ao longo do axônio que funcionam como 'borrifadores', liberando neurotransmissores sobre uma área ampla do tecido-alvo, em vez de em uma única sinapse focada.">varicosidades</span>.</li>
+                            <li>Essa liberação difusa permite que um único neurônio influencie uma grande área de tecido, garantindo uma resposta coordenada.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sympathetic Nervous System Section -->
+    <section id="simpatico" class="section-container">
+         <div class="section-header-card">
+            <h2 class="section-title">Divisão Simpática</h2>
+            <p class="section-subtitle">O sistema de "luta ou fuga". Prepara o corpo para ação, aumentando a frequência cardíaca, desviando o sangue para os músculos e mobilizando energia.</p>
+        </div>
+        <div class="topics-grid">
+            <div class="topic-card" id="topic-origem-e-anatomia-simpatico">
+                <div class="summary">Origem e Anatomia</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Origem <span class="term" data-description="Os neurônios pré-ganglionares simpáticos se originam nos segmentos torácico (T1) e lombar (L2) da medula espinhal.">Toracolombar</span>.</li>
+                            <li>Neurônios pré-ganglionares são <span class="term" data-description="O axônio do primeiro neurônio é curto, pois ele faz sinapse em gânglios que estão próximos à medula espinhal.">curtos</span> e se ramificam amplamente.</li>
+                            <li>Neurônios pós-ganglionares são <span class="term" data-description="O axônio do segundo neurônio é longo, pois precisa percorrer uma distância maior desde o gânglio até o órgão-alvo.">longos</span>.</li>
+                            <li>Os gânglios formam a <span class="term" data-description="Uma cadeia de gânglios interconectados localizada em ambos os lados da coluna vertebral. Permite que o sinal simpático se espalhe rapidamente para múltiplos órgãos.">Cadeia Simpática Paravertebral</span>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-neurotransmissores-simpatico">
+                <div class="summary">Neurotransmissores</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Neurônio pré-ganglionar libera <span class="term" data-description="A acetilcolina é o neurotransmissor usado na sinapse dentro do gânglio autonômico, atuando em receptores nicotínicos.">ACh</span>.</li>
+                            <li>Neurônio pós-ganglionar libera <span class="term" data-description="A norepinefrina (ou noradrenalina) é o principal neurotransmissor liberado pelo neurônio pós-ganglionar simpático no órgão-alvo.">Norepinefrina (NE)</span>.</li>
+                            <li>A ação da NE termina principalmente por <span class="term" data-description="A principal forma de encerrar o sinal simpático é através de uma proteína transportadora (NET) que bombeia a norepinefrina de volta para o neurônio que a liberou, para ser reutilizada ou degradada.">recaptação</span> no terminal do axônio.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-receptores-adrenergicos">
+                <div class="summary">Receptores Adrenérgicos</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Receptores <span class="term" data-description="Geralmente causam contração do músculo liso (vasoconstrição). Respondem mais fortemente à norepinefrina.">Alfa (α)</span>: α1 (excitatório, aumenta Ca²⁺), α2 (inibitório, diminui AMPc).</li>
+                            <li>Receptores <span class="term" data-description="Têm diferentes afinidades e efeitos. Respondem tanto à epinefrina quanto à norepinefrina.">Beta (β)</span>: β1 (no coração, aumenta FC e força), β2 (nos brônquios e vasos, causa relaxamento), β3 (no tecido adiposo, estimula a lipólise).</li>
+                            <li>A resposta do órgão depende de qual tipo de receptor ele expressa.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-medula-suprarrenal">
+                <div class="summary">Medula Suprarrenal</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>É um <span class="term" data-description="Funciona como um gânglio simpático especializado. Os neurônios pré-ganglionares fazem sinapse diretamente em suas células, que são neurônios pós-ganglionares modificados.">gânglio simpático modificado</span>.</li>
+                            <li>As <span class="term" data-description="Células da medula suprarrenal que sintetizam e secretam catecolaminas diretamente na corrente sanguínea.">células cromafins</span> liberam catecolaminas no sangue.</li>
+                            <li>Secreta principalmente <span class="term" data-description="A epinefrina (adrenalina) funciona como um neuro-hormônio, reforçando e prolongando a resposta simpática em todo o corpo, alcançando tecidos que não têm inervação simpática direta.">Epinefrina</span> (80%) e Norepinefrina (20%).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-resposta-de-luta-ou-fuga">
+                <div class="summary">Resposta de "Luta ou Fuga"</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Prepara o corpo para esforço físico intenso.</li>
+                            <li>Aumenta a frequência cardíaca e a força de contração.</li>
+                            <li>Redireciona o fluxo sanguíneo para <span class="term" data-description="Ocorre vasoconstrição em órgãos como pele e intestino, e vasodilatação nos músculos esqueléticos, coração e cérebro para priorizar a entrega de oxigênio a esses tecidos.">músculos, coração e cérebro</span>.</li>
+                             <li>Mobiliza <span class="term" data-description="Estimula a quebra de glicogênio (glicogenólise) e gordura (lipólise) para fornecer glicose e ácidos graxos como combustível rápido para as células.">reservas de energia</span> (glicose e gordura).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="topic-card" id="topic-descarga-em-massa">
+                <div class="summary">Descarga em Massa</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Devido à ampla divergência dos neurônios pré-ganglionares na cadeia simpática, o sistema pode ser ativado de forma generalizada.</li>
+                            <li>Isso permite uma resposta rápida e coordenada em todo o corpo durante situações de estresse extremo.</li>
+                            <li>Ex: Em um susto, o coração acelera, a sudorese aumenta e as pupilas dilatam, tudo ao mesmo tempo.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parasympathetic Nervous System Section -->
+    <section id="parassimpatico" class="section-container">
+        <div class="section-header-card">
+            <h2 class="section-title">Divisão Parassimpática</h2>
+            <p class="section-subtitle">O sistema de "repouso e digestão". Atua para conservar energia e direcionar as funções corporais para atividades de manutenção, como digestão e descanso.</p>
+        </div>
+        <div class="topics-grid">
+            <div class="topic-card" id="topic-origem-e-anatomia-parassimpatico">
+                <div class="summary">Origem e Anatomia</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Origem <span class="term" data-description="Os neurônios pré-ganglionares se originam no tronco encefálico (associados aos nervos cranianos III, VII, IX e X) e na região sacral da medula espinhal.">Craniossacral</span>.</li>
+                            <li>Neurônios pré-ganglionares são <span class="term" data-description="O axônio do primeiro neurônio é longo, pois viaja do SNC até um gânglio localizado muito próximo ou dentro do próprio órgão-alvo.">longos</span>.</li>
+                            <li>Neurônios pós-ganglionares são <span class="term" data-description="O axônio do segundo neurônio é muito curto, pois já está no órgão-alvo ou adjacente a ele.">curtos</span>.</li>
+                            <li>Os gânglios estão localizados <span class="term" data-description="Os gânglios parassimpáticos (terminais) estão situados na parede do órgão que inervam ou muito perto dele, permitindo um controle mais localizado.">próximos ou dentro dos órgãos-alvo</span>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-neurotransmissores-parassimpatico">
+                <div class="summary">Neurotransmissores</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Tanto o neurônio pré quanto o pós-ganglionar liberam <span class="term" data-description="A acetilcolina é o neurotransmissor em ambas as sinapses (ganglionar e no órgão-alvo) da via parassimpática.">Acetilcolina (ACh)</span>.</li>
+                            <li>A ação da ACh é encerrada rapidamente pela enzima <span class="term" data-description="A acetilcolinesterase está presente na fenda sináptica e quebra rapidamente a ACh em colina e acetato, encerrando o sinal. Isso contribui para a natureza localizada das respostas parassimpáticas.">AChE</span>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-receptores-colinergicos">
+                <div class="summary">Receptores Colinérgicos</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Receptor no gânglio é <span class="term" data-description="O receptor na sinapse ganglionar é do tipo nicotínico. Ele é um canal iônico que, ao ser ativado pela ACh, sempre causa uma resposta excitatória no neurônio pós-ganglionar.">Nicotínico (RACh-N)</span>.</li>
+                            <li>Receptor no órgão-alvo é <span class="term" data-description="O receptor no órgão efetor é do tipo muscarínico. Ele é acoplado à proteína G e pode ser tanto excitatório (ex: contração do TGI) quanto inibitório (ex: diminuição da FC), dependendo do subtipo e do tecido.">Muscarínico (RACh-M)</span>.</li>
+                            <li>Existem múltiplos subtipos de receptores muscarínicos (M1-M5) com diferentes localizações e funções.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-funcao-de-repouso-e-digestao">
+                <div class="summary">Função de "Repouso e Digestão"</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Promove um estado de calma e conservação de energia.</li>
+                            <li>Diminui a frequência cardíaca (<span class="term" data-description="Redução da frequência dos batimentos cardíacos, um efeito cronotrópico negativo.">bradicardia</span>).</li>
+                            <li><span class="term" data-description="Contração da pupila para reduzir a entrada de luz, focando a visão para perto.">Miose</span> e <span class="term" data-description="Contração das vias aéreas. Em condições normais, isso não é significativo, mas pode ser em doenças como a asma.">broncoconstrição</span>.</li>
+                            <li>Aumenta a <span class="term" data-description="Movimento rítmico do trato gastrointestinal que impulsiona o alimento.">motilidade</span> e as secreções do TGI.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="topic-card" id="topic-controle-especifico">
+                <div class="summary">Controle Específico</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>As respostas parassimpáticas são <span class="term" data-description="Ao contrário da resposta simpática que pode ser generalizada, a ativação parassimpática é tipicamente direcionada a órgãos específicos, permitindo um controle mais localizado e fino.">altamente localizadas</span>.</li>
+                            <li>A anatomia da via (neurônio pré-ganglionar longo indo direto ao alvo) favorece o controle de um órgão de cada vez.</li>
+                             <li>Isso permite, por exemplo, que o sistema digestivo seja ativado sem afetar significativamente o coração ou os pulmões.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-o-nervo-vago-nervo-x">
+                <div class="summary">O Nervo Vago (Nervo X)</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>É o principal componente da divisão parassimpática.</li>
+                            <li>Carrega cerca de <span class="term" data-description="Isso demonstra sua importância central no controle parassimpático da maioria das funções viscerais abaixo do pescoço.">75% de todas as fibras parassimpáticas</span> do corpo.</li>
+                             <li>Inerva o coração, pulmões, esôfago, estômago, pâncreas, fígado e a maior parte do intestino.</li>
+                             <li>O <span class="term" data-description="O nervo vago exerce uma influência inibitória constante sobre o nó SA do coração, mantendo a frequência cardíaca de repouso baixa. Sem esse tônus, a FC seria de aproximadamente 100 bpm.">tônus vagal</span> é crucial para manter a frequência cardíaca de repouso.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz-section" class="section-container">
+        <div class="section-header-card">
+            <h2 class="section-title">Teste seu Conhecimento</h2>
+            <p class="section-subtitle">Vamos ver o que você aprendeu! Responda às perguntas a seguir para testar sua compreensão do Sistema Nervoso Autônomo.</p>
+        </div>
+
+        <div id="quiz-area" class="w-full max-w-3xl flex flex-col items-center">
+            <div id="quiz-container" class="quiz-container hidden">
+                <div id="quiz-timer">30</div>
+                <h3 id="quiz-question"></h3>
+                <ul id="quiz-options"></ul>
+            </div>
+            <div id="quiz-results" class="quiz-container hidden">
+                <h3>Quiz Finalizado!</h3>
+                <div id="quiz-percentage">100%</div>
+                <div class="results-stats">
+                    <span id="stat-correct-count" class="stat-correct"></span>
+                    <span id="stat-incorrect-count" class="stat-incorrect"></span>
+                </div>
+                <h4 class="text-lg font-semibold mt-6 mb-2 text-slate-700">Tópicos para revisar:</h4>
+                <ul id="missed-topics-list"></ul>
+                 <button id="restart-quiz-btn">Novo Quiz</button>
+            </div>
+            <button id="quiz-start-btn">Começar Quiz</button>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer-signature">
+        <p>Feito por Rafael Chaves Sebe</p>
+    </footer>
+
+    <!-- Modal Structure -->
+    <div id="modal-overlay" class="fixed inset-0">
+        <div id="modal-content" class="relative">
+            <div id="modal-header" class="relative">
+                <h3 id="modal-title"></h3>
+                <button id="modal-close-btn" class="absolute top-4 right-4">&times;</button>
+            </div>
+            <p id="modal-description"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Observer for section background changes
+            const bgObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const glowId = `bg-${entry.target.id}`;
+                    const glowEl = document.getElementById(glowId);
+                    if (glowEl) {
+                        if (entry.isIntersecting) {
+                            glowEl.style.opacity = '0.25';
+                        } else {
+                            glowEl.style.opacity = '0';
+                        }
+                    }
+                });
+            }, { threshold: 0.4 }); 
+
+            document.querySelectorAll('#common, #simpatico, #parassimpatico').forEach(section => {
+                bgObserver.observe(section);
+            });
+
+            // Observer for card animations
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        entry.target.classList.remove('visible'); 
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            });
+            document.querySelectorAll('.topic-card, .section-header-card').forEach(card => {
+                cardObserver.observe(card);
+            });
+
+
+            // Modal logic
+            const terms = document.querySelectorAll('.term');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalContent = document.getElementById('modal-content');
+            const modalHeader = document.getElementById('modal-header');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            terms.forEach(term => {
+                term.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const title = term.textContent;
+                    const description = term.getAttribute('data-description');
+                    const parentSection = term.closest('section');
+                    let theme = 'common'; 
+                    if (parentSection && parentSection.id) {
+                       if (parentSection.id === 'simpatico') theme = 'simpatico';
+                       else if (parentSection.id === 'parassimpatico') theme = 'parassimpatico';
+                    }
+
+                    modalTitle.textContent = title;
+                    modalDescription.textContent = description;
+                    
+                    modalContent.className = 'relative'; 
+                    modalHeader.className = '';
+                    modalContent.classList.add(`theme-${theme}`);
+                    modalHeader.classList.add(`theme-${theme}`);
+                    
+                    modalOverlay.classList.add('visible');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            const closeModal = () => {
+                modalOverlay.classList.remove('visible');
+                
+                setTimeout(() => {
+                    if (!modalOverlay.classList.contains('visible')) {
+                         document.body.style.overflow = '';
+                    }
+                }, 400); 
+            };
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (event) => {
+                if (event.target === modalOverlay) closeModal();
+            });
+            
+            // Accordion logic
+            document.querySelectorAll('.topic-card .summary').forEach(summary => {
+                summary.addEventListener('click', (e) => {
+                    const card = e.currentTarget.parentElement;
+                    toggleAccordion(card);
+                });
+            });
+
+            function toggleAccordion(cardToToggle) {
+                const contentWrapper = cardToToggle.querySelector('.topic-content-wrapper');
+                const isOpen = cardToToggle.classList.contains('is-open');
+
+                const parentGrid = cardToToggle.closest('.topics-grid');
+                parentGrid.querySelectorAll('.topic-card.is-open').forEach(openCard => {
+                    if (openCard !== cardToToggle) {
+                        const otherContentWrapper = openCard.querySelector('.topic-content-wrapper');
+                        otherContentWrapper.style.maxHeight = '0px';
+                        openCard.classList.remove('is-open');
+                    }
+                });
+
+                if (isOpen) {
+                    contentWrapper.style.maxHeight = '0px';
+                    cardToToggle.classList.remove('is-open');
+                } else {
+                    const content = cardToToggle.querySelector('.topic-content');
+                    contentWrapper.style.maxHeight = content.scrollHeight + 'px';
+                    cardToToggle.classList.add('is-open');
+                }
+            }
+            
+            // ===================================
+            // == QUIZ LOGIC
+            // ===================================
+            const questionBank = [
+                // Estrutura Geral do SNA
+                { question: "Qual é a sequência correta de neurônios na via eferente do SNA?", topic: "Estrutura Geral do SNA", options: ["Pós-ganglionar -> Gânglio -> Pré-ganglionar", "Pré-ganglionar -> Pós-ganglionar -> Órgão-alvo", "SNC -> Pós-ganglionar -> Gânglio", "Pré-ganglionar -> Gânglio -> Pós-ganglionar", "Gânglio -> Pré-ganglionar -> Pós-ganglionar"], correctAnswer: 3, originalIndex: 0 },
+                { question: "O corpo celular do neurônio pós-ganglionar está localizado em qual estrutura?", topic: "Estrutura Geral do SNA", options: ["Na medula espinhal", "No tronco encefálico", "No órgão-alvo", "No cerebelo", "Em um gânglio autonômico"], correctAnswer: 4, originalIndex: 1 },
+                // Controle Antagonista
+                { question: "O que significa dizer que as divisões simpática e parassimpática exercem um 'controle antagonista'?", topic: "Controle Antagonista", options: ["Ambas as divisões estimulam os mesmos órgãos", "Uma divisão estimula uma resposta, enquanto a outra a inibe", "Elas trabalham em momentos diferentes do dia", "Apenas uma divisão inerva cada órgão", "Elas usam os mesmos neurotransmissores"], correctAnswer: 1, originalIndex: 2 },
+                { question: "Qual o principal objetivo do 'Balanço Autonômico' entre as divisões do SNA?", topic: "Controle Antagonista", options: ["Manter a homeostasia", "Acelerar o metabolismo", "Promover o crescimento muscular", "Melhorar a memória", "Aumentar a pressão arterial"], correctAnswer: 0, originalIndex: 3 },
+                // Centros de Controle
+                { question: "Qual parte do tronco encefálico contém centros vitais para o controle direto da respiração e dos batimentos cardíacos?", topic: "Centros de Controle", options: ["Cerebelo", "Hipotálamo", "Bulbo e Ponte", "Tálamo", "Córtex motor"], correctAnswer: 2, originalIndex: 4 },
+                { question: "O hipotálamo, principal centro integrador do SNA, regula funções como:", topic: "Centros de Controle", options: ["Movimentos voluntários e fala", "Visão e audição", "Memória de longo prazo", "Temperatura corporal, fome e sede", "Equilíbrio e coordenação motora"], correctAnswer: 3, originalIndex: 5 },
+                // Neurotransmissores e Receptores
+                { question: "Um neurônio que libera norepinefrina (NE) é classificado como:", topic: "Neurotransmissores e Receptores", options: ["Colinérgico", "Dopaminérgico", "Adrenérgico", "Serotoninérgico", "GABAérgico"], correctAnswer: 2, originalIndex: 6 },
+                { question: "O que são receptores no contexto do SNA?", topic: "Neurotransmissores e Receptores", options: ["Células que geram impulsos nervosos", "Moléculas que transportam oxigênio", "Proteínas na célula-alvo que se ligam aos neurotransmissores", "As próprias moléculas neurotransmissoras", "Os gânglios autonômicos"], correctAnswer: 2, originalIndex: 7 },
+                // Controle Tônico
+                { question: "No controle tônico dos vasos sanguíneos, o que acontece se a frequência do sinal simpático diminuir?", topic: "Controle Tônico", options: ["Vasoconstrição", "Vasodilatação", "Nenhuma alteração", "Aumento da pressão arterial", "Contração do músculo esquelético"], correctAnswer: 1, originalIndex: 8 },
+                { question: "O conceito de 'tônus' no controle tônico refere-se a:", topic: "Controle Tônico", options: ["Um sinal que liga e desliga rapidamente", "Um nível basal de atividade que pode ser modulado", "A força máxima de contração de um músculo", "A ausência total de atividade nervosa", "Um controle exclusivamente parassimpático"], correctAnswer: 1, originalIndex: 9 },
+                // Junção Neuroefetora
+                { question: "Qual a principal característica da junção neuroefetora autonômica que permite influenciar uma grande área de tecido?", topic: "Junção Neuroefetora", options: ["Sinapses elétricas diretas", "A presença de muitos dendritos", "A ausência de neurotransmissores", "A presença de varicosidades ao longo do axônio", "O neurônio pós-ganglionar ser mielinizado"], correctAnswer: 3, originalIndex: 10 },
+                { question: "Diferente da junção neuromuscular, a junção neuroefetora do SNA resulta em:", topic: "Junção Neuroefetora", options: ["Uma resposta mais rápida e localizada", "Uma liberação de neurotransmissor mais difusa sobre o tecido", "O uso exclusivo de acetilcolina", "A contração apenas de músculo esquelético", "Uma comunicação que não usa receptores"], correctAnswer: 1, originalIndex: 11 },
+                // Origem e Anatomia (Simpático)
+                { question: "A divisão simpática do SNA tem origem em quais segmentos da medula espinhal?", topic: "Origem e Anatomia (Simpático)", options: ["Cervical e Torácica", "Torácica e Lombar", "Lombar e Sacral", "Craniossacral", "Apenas Craniana"], correctAnswer: 1, originalIndex: 12 },
+                { question: "Na divisão simpática, os neurônios pré-ganglionares são tipicamente ____ e os pós-ganglionares são ____.", topic: "Origem e Anatomia (Simpático)", options: ["longos, curtos", "curtos, longos", "longos, longos", "curtos, curtos", "mielinizados, não mielinizados"], correctAnswer: 1, originalIndex: 13 },
+                // Neurotransmissores (Simpático)
+                { question: "Qual neurotransmissor é liberado pelo neurônio pré-ganglionar SIMPÁTICO no gânglio?", topic: "Neurotransmissores (Simpático)", options: ["Norepinefrina (NE)", "Epinefrina", "Dopamina", "Acetilcolina (ACh)", "Serotonina"], correctAnswer: 3, originalIndex: 14 },
+                { question: "Como a ação da Norepinefrina (NE) na fenda sináptica é primariamente terminada?", topic: "Neurotransmissores (Simpático)", options: ["Por difusão para fora da fenda", "Por degradação enzimática pela AChE", "Por recaptação no terminal do axônio", "Por ligação a receptores pré-sinápticos", "Por ação do sistema parassimpático"], correctAnswer: 2, originalIndex: 15 },
+                // Receptores Adrenérgicos
+                { question: "A ativação de receptores Beta-1 (β1) no coração causa qual efeito?", topic: "Receptores Adrenérgicos", options: ["Diminuição da frequência cardíaca", "Vasoconstrição coronariana", "Aumento da frequência e força de contração", "Relaxamento do músculo cardíaco", "Broncoconstrição"], correctAnswer: 2, originalIndex: 16 },
+                { question: "Qual receptor adrenérgico é o principal alvo para causar relaxamento do músculo liso dos brônquios (broncodilatação)?", topic: "Receptores Adrenérgicos", options: ["Alfa-1 (α1)", "Alfa-2 (α2)", "Beta-1 (β1)", "Beta-2 (β2)", "Beta-3 (β3)"], correctAnswer: 3, originalIndex: 17 },
+                // Medula Suprarrenal
+                { question: "As células cromafins da medula suprarrenal são funcionalmente análogas a:", topic: "Medula Suprarrenal", options: ["Neurônios pré-ganglionares simpáticos", "Neurônios pós-ganglionares simpáticos", "Células da glia", "Neurônios pré-ganglionares parassimpáticos", "Células musculares lisas"], correctAnswer: 1, originalIndex: 18 },
+                { question: "A liberação de epinefrina pela medula suprarrenal na corrente sanguínea tem como efeito:", topic: "Medula Suprarrenal", options: ["Uma resposta rápida e de curta duração", "Uma resposta localizada apenas no abdômen", "Reforçar e prolongar a resposta simpática", "Ativar a resposta de 'repouso e digestão'", "Diminuir os níveis de glicose no sangue"], correctAnswer: 2, originalIndex: 19 },
+                // Resposta de "Luta ou Fuga"
+                { question: "Durante a resposta de 'luta ou fuga', o que acontece com o fluxo sanguíneo?", topic: "Resposta de \"Luta ou Fuga\"", options: ["Aumenta para o sistema digestivo", "É desviado para a pele e rins", "É redirecionado para os músculos esqueléticos, coração e cérebro", "Diminui uniformemente em todo o corpo", "Permanece inalterado"], correctAnswer: 2, originalIndex: 20 },
+                { question: "Qual processo metabólico é ativado pelo sistema simpático para fornecer energia rápida?", topic: "Resposta de \"Luta ou Fuga\"", options: ["Glicogênese (formação de glicogênio)", "Lipogênese (formação de gordura)", "Digestão de proteínas", "Absorção de nutrientes", "Glicogenólise (quebra de glicogênio)"], correctAnswer: 4, originalIndex: 21 },
+                // Descarga em Massa
+                { question: "O que permite que o sistema simpático atue em 'descarga em massa', ativando múltiplos órgãos simultaneamente?", topic: "Descarga em Massa", options: ["A lentidão de seus neurotransmissores", "A ausência de gânglios", "A ampla divergência dos neurônios pré-ganglionares", "O controle exclusivo pelo córtex cerebral", "Seus neurônios pós-ganglionares curtos"], correctAnswer: 2, originalIndex: 22 },
+                { question: "Qual das seguintes situações é um exemplo de descarga em massa simpática?", topic: "Descarga em Massa", options: ["A digestão lenta de uma refeição", "O ato de focar a visão em um livro", "O aumento da salivação ao ver comida", "A resposta a um susto repentino (coração acelerado, sudorese)", "O sono profundo"], correctAnswer: 3, originalIndex: 23 },
+                // Origem e Anatomia (Parassimpático)
+                { question: "A divisão parassimpática possui uma origem chamada:", topic: "Origem e Anatomia (Parassimpático)", options: ["Toracolombar", "Lombossacral", "Cervicotorácica", "Craniossacral", "Apenas medular"], correctAnswer: 3, originalIndex: 24 },
+                { question: "Onde estão localizados os gânglios da divisão parassimpática?", topic: "Origem e Anatomia (Parassimpático)", options: ["Em uma cadeia ao lado da medula espinhal", "Próximos ou dentro dos órgãos-alvo", "Apenas no cérebro", "Na medula suprarrenal", "Junto às raízes dorsais dos nervos espinhais"], correctAnswer: 1, originalIndex: 25 },
+                // Neurotransmissores (Parassimpático)
+                { question: "Qual neurotransmissor é utilizado em AMBAS as sinapses (ganglionar e neuroefetora) da via parassimpática?", topic: "Neurotransmissores (Parassimpático)", options: ["Norepinefrina", "Dopamina", "Acetilcolina", "Serotonina", "Epinefrina"], correctAnswer: 2, originalIndex: 26 },
+                { question: "A ação da acetilcolina na junção neuroefetora parassimpática é rapidamente terminada pela enzima:", topic: "Neurotransmissores (Parassimpático)", options: ["Monoamina oxidase (MAO)", "Catecol-O-metiltransferase (COMT)", "Acetilcolinesterase (AChE)", "Dopa descarboxilase", "Tirosina hidroxilase"], correctAnswer: 2, originalIndex: 27 },
+                // Receptores Colinérgicos
+                { question: "O receptor para acetilcolina no órgão-alvo da via parassimpática é do tipo:", topic: "Receptores Colinérgicos", options: ["Nicotínico", "Adrenérgico Alfa", "Adrenérgico Beta", "Muscarínico", "Dopaminérgico"], correctAnswer: 3, originalIndex: 28 },
+                { question: "Nos gânglios autonômicos, tanto simpáticos quanto parassimpáticos, o receptor colinérgico é sempre do tipo:", topic: "Receptores Colinérgicos", options: ["Muscarínico M1", "Muscarínico M2", "Nicotínico", "Adrenérgico", "Sensorial"], correctAnswer: 2, originalIndex: 29 },
+                // Função de "Repouso e Digestão"
+                { question: "Qual das seguintes ações é característica da função de 'repouso e digestão' parassimpática?", topic: "Função de \"Repouso e Digestão\"", options: ["Aumento da frequência cardíaca", "Dilatação da pupila (midríase)", "Aumento da motilidade e secreções do TGI", "Redução do fluxo sanguíneo para o intestino", "Liberação de glicose pelo fígado"], correctAnswer: 2, originalIndex: 30 },
+                { question: "A ativação parassimpática nos pulmões causa:", topic: "Função de \"Repouso e Digestão\"", options: ["Broncodilatação", "Aumento da capacidade respiratória", "Broncoconstrição", "Diminuição da produção de muco", "Aumento da frequência respiratória"], correctAnswer: 2, originalIndex: 31 },
+                // Controle Específico
+                { question: "Por que as respostas parassimpáticas são geralmente mais localizadas e específicas do que as simpáticas?", topic: "Controle Específico", options: ["Porque usam neurotransmissores mais lentos", "Devido à anatomia da via, com gânglios próximos ao alvo", "Porque são controladas por uma área diferente do cérebro", "Porque não possuem gânglios", "Porque a descarga em massa é mais comum"], correctAnswer: 1, originalIndex: 32 },
+                { question: "A capacidade de ativar a digestão sem afetar significativamente o coração é um exemplo de qual característica parassimpática?", topic: "Controle Específico", options: ["Controle antagonista", "Descarga em massa", "Controle tônico", "Controle específico e localizado", "Origem toracolombar"], correctAnswer: 3, originalIndex: 33 },
+                // O Nervo Vago (Nervo X)
+                { question: "Qual a importância do Nervo Vago (X) para a divisão parassimpática?", topic: "O Nervo Vago (Nervo X)", options: ["Ele inerva apenas a cabeça e o pescoço", "Ele é o único nervo parassimpático", "Ele carrega cerca de 75% de todas as fibras parassimpáticas", "Ele é responsável pelas respostas de 'luta ou fuga'", "Ele libera apenas norepinefrina"], correctAnswer: 2, originalIndex: 34 },
+                { question: "O 'tônus vagal' é um termo que descreve a influência parassimpática constante sobre qual órgão?", topic: "O Nervo Vago (Nervo X)", options: ["Fígado", "Intestino", "Pulmões", "Coração", "Rins"], correctAnswer: 3, originalIndex: 35 },
+            ];
+
+            const startBtn = document.getElementById('quiz-start-btn');
+            const restartBtn = document.getElementById('restart-quiz-btn');
+            const quizContainer = document.getElementById('quiz-container');
+            const resultsContainer = document.getElementById('quiz-results');
+            const questionEl = document.getElementById('quiz-question');
+            const optionsEl = document.getElementById('quiz-options');
+            const timerEl = document.getElementById('quiz-timer');
+            
+            let currentQuestionIndex = 0;
+            let score = 0;
+            let missedTopics = [];
+            let timerInterval;
+            let activeQuiz = [];
+            let questionWeights = [];
+            const topicIdMap = {};
+
+            function initializeQuizSystem() {
+                questionWeights = new Array(questionBank.length).fill(10); // Default weight
+
+                document.querySelectorAll('.topic-card').forEach(card => {
+                    const summaryText = card.querySelector('.summary').textContent.trim();
+                    topicIdMap[summaryText] = card.id;
+                });
+                
+                // Add specific mappings for topics with duplicate names in the bank
+                topicIdMap["Origem e Anatomia (Simpático)"] = 'topic-origem-e-anatomia-simpatico';
+                topicIdMap["Neurotransmissores (Simpático)"] = 'topic-neurotransmissores-simpatico';
+                topicIdMap["Origem e Anatomia (Parassimpático)"] = 'topic-origem-e-anatomia-parassimpatico';
+                topicIdMap["Neurotransmissores (Parassimpático)"] = 'topic-neurotransmissores-parassimpatico';
+                topicIdMap["Função de \"Repouso e Digestão\""] = 'topic-funcao-de-repouso-e-digestao';
+                topicIdMap["Resposta de \"Luta ou Fuga\""] = 'topic-resposta-de-luta-ou-fuga';
+                topicIdMap["O Nervo Vago (Nervo X)"] = 'topic-o-nervo-vago-nervo-x';
+                topicIdMap["Receptores Colinérgicos"] = 'topic-receptores-colinergicos';
+            }
+
+            function startQuiz() {
+                activeQuiz = [];
+                let availableQuestions = [...questionBank];
+                
+                const quizSize = 12;
+                const weightedPool = [];
+                availableQuestions.forEach(q => {
+                    const weight = questionWeights[q.originalIndex];
+                    for (let i = 0; i < weight; i++) {
+                        weightedPool.push(q);
+                    }
+                });
+
+                while(activeQuiz.length < quizSize && weightedPool.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * weightedPool.length);
+                    const chosenQuestion = weightedPool[randomIndex];
+
+                    if (!activeQuiz.some(q => q.originalIndex === chosenQuestion.originalIndex)) {
+                        activeQuiz.push(chosenQuestion);
+                    }
+                    // Remove all instances of the chosen question from the pool to ensure uniqueness
+                    for (let i = weightedPool.length - 1; i >= 0; i--) {
+                        if (weightedPool[i].originalIndex === chosenQuestion.originalIndex) {
+                            weightedPool.splice(i, 1);
+                        }
+                    }
+                }
+
+                currentQuestionIndex = 0;
+                score = 0;
+                missedTopics = [];
+                startBtn.classList.add('hidden');
+                resultsContainer.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                showQuestion();
+            }
+
+            function showQuestion() {
+                resetState();
+                if (currentQuestionIndex >= activeQuiz.length) {
+                    showResults();
+                    return;
+                }
+                const questionData = activeQuiz[currentQuestionIndex];
+                questionEl.textContent = questionData.question;
+                
+                questionData.options.forEach((option, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = option;
+                    li.classList.add('quiz-option');
+                    li.dataset.index = index;
+                    li.addEventListener('click', selectAnswer);
+                    optionsEl.appendChild(li);
+                });
+                
+                startTimer();
+            }
+
+            function startTimer() {
+                let timeLeft = 30;
+                timerEl.textContent = timeLeft;
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timerEl.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        selectAnswer(null); // Time's up
+                    }
+                }, 1000);
+            }
+
+            function resetState() {
+                clearInterval(timerInterval);
+                while(optionsEl.firstChild) {
+                    optionsEl.removeChild(optionsEl.firstChild);
+                }
+                document.body.classList.remove('correct-bg', 'incorrect-bg');
+            }
+            
+            function selectAnswer(e) {
+                clearInterval(timerInterval);
+                const selectedOption = e ? e.target : null;
+                const currentQuestion = activeQuiz[currentQuestionIndex];
+                const correctIndex = currentQuestion.correctAnswer;
+                const originalIndex = currentQuestion.originalIndex;
+                let isCorrect = false;
+
+                if(selectedOption && parseInt(selectedOption.dataset.index) === correctIndex) {
+                    isCorrect = true;
+                }
+                
+                Array.from(optionsEl.children).forEach((optionNode, index) => {
+                    optionNode.classList.add('disabled');
+                    if (index === correctIndex) {
+                        optionNode.classList.add('correct-answer');
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    if(selectedOption) selectedOption.classList.add('correct-answer');
+                    document.body.classList.add('correct-bg');
+                    questionWeights[originalIndex] = Math.max(1, Math.floor(questionWeights[originalIndex] / 2));
+                } else {
+                    if (selectedOption) {
+                        selectedOption.classList.add('incorrect-answer');
+                    }
+                    missedTopics.push(currentQuestion.topic);
+                    document.body.classList.add('incorrect-bg');
+                    questionWeights[originalIndex] = Math.min(50, questionWeights[originalIndex] * 2);
+                }
+
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    if(currentQuestionIndex < activeQuiz.length) {
+                        showQuestion();
+                    } else {
+                        showResults();
+                    }
+                }, 2000); 
+            }
+            
+            function showResults() {
+                resetState();
+                quizContainer.classList.add('hidden');
+                resultsContainer.classList.remove('hidden');
+
+                const percentage = activeQuiz.length > 0 ? Math.round((score / activeQuiz.length) * 100) : 0;
+                document.getElementById('quiz-percentage').textContent = `${percentage}%`;
+                document.getElementById('stat-correct-count').textContent = `✔️ ${score} Acertos`;
+                document.getElementById('stat-incorrect-count').textContent = `❌ ${activeQuiz.length - score} Erros`;
+                
+                const missedListEl = document.getElementById('missed-topics-list');
+                missedListEl.innerHTML = '';
+                
+                if (missedTopics.length > 0) {
+                     const uniqueMissedTopics = [...new Set(missedTopics)];
+                     uniqueMissedTopics.forEach(topic => {
+                        const cardId = topicIdMap[topic];
+                        if (!cardId) {
+                            console.warn(`Could not find ID for topic: "${topic}"`);
+                            return;
+                        };
+
+                        const bubble = document.createElement('li');
+                        bubble.textContent = topic;
+                        bubble.classList.add('missed-topic-bubble');
+
+                        bubble.addEventListener('click', (e) => {
+                            const targetCard = document.getElementById(cardId);
+                            if (targetCard) {
+                                e.currentTarget.classList.add('visited-topic');
+                                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                if (!targetCard.classList.contains('is-open')) {
+                                    toggleAccordion(targetCard);
+                                }
+                            }
+                        });
+
+                        missedListEl.appendChild(bubble);
+                     });
+                } else {
+                     const congrats = document.createElement('li');
+                     congrats.textContent = "Parabéns, você acertou tudo!";
+                     congrats.classList.add('text-green-600', 'font-semibold');
+                     missedListEl.appendChild(congrats);
+                }
+            }
+
+            initializeQuizSystem();
+            startBtn.addEventListener('click', startQuiz);
+            restartBtn.addEventListener('click', startQuiz);
+        });
+    </script>
+</body>
+</html>
