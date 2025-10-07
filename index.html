@@ -10,22 +10,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* == Vibrant Theme Colors == */
-            --simpatico-color: #f43f5e;      /* Vibrant Rose */
-            --parassimpatico-color: #3b82f6; /* Vibrant Blue */
-            --common-color: #84cc16;        /* Vibrant Lime */
+            /* == Cores do Tema == */
+            --simpatico-color: #f43f5e;      /* Rosa Vibrante */
+            --parassimpatico-color: #3b82f6; /* Azul Vibrante */
+            --common-color: #84cc16;        /* Lima Vibrante */
 
-            /* Glow/Highlight Colors for light theme */
+            /* Cores de Brilho/Destaque */
             --simpatico-glow: rgba(244, 63, 94, 0.2);
             --parassimpatico-glow: rgba(59, 130, 246, 0.2);
             --common-glow: rgba(132, 204, 22, 0.2);
             
-            /* Theme Border Colors for light theme */
+            /* Cores de Borda do Tema */
             --simpatico-border: rgba(244, 63, 94, 0.4);
             --parassimpatico-border: rgba(59, 130, 246, 0.4);
             --common-border: rgba(132, 204, 22, 0.4);
 
-            /* Light Theme Palette */
+            /* Paleta de Cores Claras */
             --bg-main: #f8fafc;
             --text-primary: #1e293b;
             --text-secondary: #475569;
@@ -37,14 +37,14 @@
             color: var(--text-primary);
             overflow-x: hidden;
             background-color: var(--bg-main);
-            transition: background-color 0.5s ease-in-out; /* For quiz feedback */
+            transition: background-color 0.5s ease-in-out; /* Para feedback do quiz */
         }
         
-        /* == Background color flash for Quiz == */
+        /* == Flash de cor de fundo para o Quiz == */
         body.correct-bg { background-color: #dcfce7; }
         body.incorrect-bg { background-color: #fee2e2; }
 
-        /* Animated background shapes */
+        /* Formas de fundo animadas */
         .background-container {
             position: fixed;
             top: 0; left: 0;
@@ -68,7 +68,7 @@
             100% { transform: translate(15vw, -20vh) scale(1.2); }
         }
         
-        /* UPDATED: Dynamic background glows for transitions */
+        /* Brilhos de fundo dinâmicos para transições */
         .dynamic-bg-glow {
             position: fixed;
             top: 50%;
@@ -85,6 +85,7 @@
         #bg-common { background-color: var(--common-color); }
         #bg-simpatico { background-color: var(--simpatico-color); }
         #bg-parassimpatico { background-color: var(--parassimpatico-color); }
+        #bg-neurotransmissores-receptores { background-color: var(--graduado-color, #eab308); }
 
 
         .section-container {
@@ -133,12 +134,12 @@
             overflow: hidden;
             z-index: 2;
             opacity: 0;
-            transform: translateY(50px) scale(0.95);
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: translateY(50px);
+            transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .section-header-card.visible {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
         .section-header-card::before {
             content: '';
@@ -191,12 +192,12 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
             overflow: hidden;
             opacity: 0;
-            transform: translateY(50px) scale(0.95);
+            transform: translateY(50px);
         }
         
         .topic-card.visible {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
         
         .topic-card:nth-child(1) { transition-delay: 0.05s; }
@@ -230,7 +231,7 @@
         }
 
         .topic-card:hover { 
-            transform: translateY(-5px) scale(1.02);
+            transform: translateY(-5px);
             border-color: rgba(255, 255, 255, 0.3); 
         }
         
@@ -280,6 +281,9 @@
         #parassimpatico .topic-card.is-open {
             box-shadow: 0 8px 25px rgba(0,0,0,0.08), inset 0 0 0 2px var(--parassimpatico-border);
         }
+         #neurotransmissores-receptores .topic-card.is-open {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08), inset 0 0 0 2px var(--graduado-border, #eab308);
+        }
         
         #common .topic-card.is-open:hover {
             box-shadow: 0 8px 25px rgba(0,0,0,0.1), inset 0 0 0 2px rgba(132, 204, 22, 0.6);
@@ -289,6 +293,9 @@
         }
         #parassimpatico .topic-card.is-open:hover {
             box-shadow: 0 8px 25px rgba(0,0,0,0.1), inset 0 0 0 2px rgba(59, 130, 246, 0.6);
+        }
+        #neurotransmissores-receptores .topic-card.is-open:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1), inset 0 0 0 2px rgba(234, 179, 8, 0.6);
         }
         
         .term { 
@@ -303,11 +310,12 @@
         #common .term { background-color: var(--common-glow); color: #4d7c0f; }
         #simpatico .term { background-color: var(--simpatico-glow); color: #9d174d; }
         #parassimpatico .term { background-color: var(--parassimpatico-glow); color: #1d4ed8; }
+        #neurotransmissores-receptores .term { background-color: var(--graduado-glow, rgba(234, 179, 8, 0.2)); color: #a16207; }
         .term:hover { 
             filter: brightness(1.15); 
         }
 
-        /* Modal Styling */
+        /* Estilo do Modal */
         #modal-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -366,6 +374,7 @@
         #modal-content.theme-common { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), inset 0 0 0 2px var(--common-border); }
         #modal-content.theme-simpatico { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), inset 0 0 0 2px var(--simpatico-border); }
         #modal-content.theme-parassimpatico { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), inset 0 0 0 2px var(--parassimpatico-border); }
+        #modal-content.theme-neurotransmissores-receptores { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), inset 0 0 0 2px var(--graduado-border, #eab308); }
         
         #modal-header, #modal-description {
             position: relative;
@@ -387,6 +396,7 @@
         #modal-header.theme-common #modal-title { color: var(--common-color); }
         #modal-header.theme-simpatico #modal-title { color: var(--simpatico-color); }
         #modal-header.theme-parassimpatico #modal-title { color: var(--parassimpatico-color); }
+        #modal-header.theme-neurotransmissores-receptores #modal-title { color: var(--graduado-color, #eab308); }
         
         #modal-description { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; padding: 1.5rem 2rem 2rem 2rem; }
         
@@ -412,7 +422,7 @@
         ul { list-style-position: inside; padding-left: 0.5rem;}
         li { margin-bottom: 0.5rem; }
 
-        /* == Quiz Styles == */
+        /* == Estilos do Quiz (Novos) == */
         #quiz-section {
              background: rgba(255, 255, 255, 0.2);
              backdrop-filter: blur(15px);
@@ -432,33 +442,99 @@
             position: relative;
         }
         
-        #quiz-timer {
-            position: absolute;
-            top: -20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: var(--text-primary);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        #progress-bar-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.4);
+            border-radius: 9999px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
-
+        #progress-bar-fill {
+            height: 1.5rem;
+            background: linear-gradient(90deg, #f43f5e, #3b82f6);
+            border-radius: 9999px;
+            transition: width 0.5s ease-in-out;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+        #progress-label {
+            text-align: center;
+            margin-top: 0.75rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        #question-counter-display {
+            position: absolute;
+            top: 2.5rem;
+            right: 2.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        #question-counter-display.facil-bg { background-color: #22c55e; }
+        #question-counter-display.media-bg { background-color: #f59e0b; }
+        #question-counter-display.dificil-bg { background-color: #ef4444; }
+        
+        #timer-display {
+            position: absolute;
+            top: 2.5rem;
+            left: 2.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.4);
+            border: 3px solid var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        #timer-display.warning {
+            border-color: #f59e0b;
+            color: #b45309;
+            transform: scale(1.1);
+        }
+        #timer-display.danger {
+            border-color: #ef4444;
+            color: #991b1b;
+            transform: scale(1.1);
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
         #quiz-question {
             font-size: 1.5rem;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 2rem;
+            padding: 0 96px; /* Espaço para timer e dificuldade */
+            text-align: center;
         }
-
+        
         #quiz-options {
             list-style: none;
             padding: 0;
@@ -469,39 +545,36 @@
 
         .quiz-option {
             background-color: rgba(255,255,255,0.7);
-            border: 2px solid transparent;
+            border: 1px solid rgba(0,0,0,0.05);
             border-radius: 1rem;
             padding: 1.25rem;
             font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+            will-change: transform, box-shadow;
         }
 
         .quiz-option:hover {
-            transform: translateX(5px);
+            transform: translateY(-3px);
             background-color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
         
-        .quiz-option.disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        
+        .quiz-option.disabled { cursor: not-allowed; opacity: 0.7; }
         .quiz-option.correct-answer {
-            border-color: #22c55e; /* green-500 */
-            background-color: #f0fdf4; /* green-50 */
-            color: #15803d; /* green-700 */
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+            color: #15803d;
+            font-weight: 600;
+        }
+        .quiz-option.incorrect-answer {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+            color: #b91c1c;
             font-weight: 600;
         }
         
-        .quiz-option.incorrect-answer {
-            border-color: #ef4444; /* red-500 */
-            background-color: #fef2f2; /* red-50 */
-            color: #b91c1c; /* red-700 */
-            font-weight: 600;
-        }
-
         #quiz-start-btn, #restart-quiz-btn {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
@@ -516,12 +589,27 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         
-        #quiz-start-btn {
-            color: var(--text-primary); /* Changed from --simpatico-color */
+        #quiz-start-btn { color: var(--text-primary); }
+        #quiz-start-btn:disabled { 
+            cursor: not-allowed; 
+            background: rgba(226, 232, 240, 0.5);
+            color: #94a3b8;
         }
+
         #restart-quiz-btn {
             color: var(--parassimpatico-color);
-             margin-top: 2rem;
+            margin-top: 2rem;
+        }
+        
+        #reset-progress-btn {
+            color: #475569; /* slate-600 */
+            background: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
         }
 
         #quiz-start-btn:hover, #restart-quiz-btn:hover {
@@ -529,10 +617,13 @@
             background: rgba(255, 255, 255, 0.6);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-        
-        #quiz-results {
-             text-align: center;
+
+        #reset-progress-btn:hover {
+             color: var(--text-primary);
+             text-decoration: underline;
         }
+        
+        #quiz-results { text-align: center; }
         
         #quiz-results h3 {
              font-size: 2rem;
@@ -576,13 +667,8 @@
             transition: all 0.2s ease-in-out;
         }
 
-        .stat-correct {
-            background-color: rgba(34, 197, 94, 0.25); 
-        }
-
-        .stat-incorrect {
-            background-color: rgba(239, 68, 68, 0.25);
-        }
+        .stat-correct { background-color: rgba(34, 197, 94, 0.25); }
+        .stat-incorrect { background-color: rgba(239, 68, 68, 0.25); }
         
         #missed-topics-list {
             display: flex;
@@ -628,9 +714,10 @@
         <div class="dynamic-bg-glow" id="bg-common"></div>
         <div class="dynamic-bg-glow" id="bg-simpatico"></div>
         <div class="dynamic-bg-glow" id="bg-parassimpatico"></div>
+        <div class="dynamic-bg-glow" id="bg-neurotransmissores-receptores"></div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Seção Hero -->
     <section id="hero" class="section-container">
         <div class="section-header-card">
             <h1>O Maestro do Corpo: Desvendando o Sistema Nervoso Autônomo</h1>
@@ -638,21 +725,82 @@
         </div>
     </section>
     
-    <!-- Common Characteristics Section -->
+    <!-- Seção de Características Comuns -->
     <section id="common" class="section-container">
         <div class="section-header-card">
             <h2 class="section-title">O Controle Involuntário</h2>
             <p class="section-subtitle">O Sistema Nervoso Autônomo (SNA) é a divisão do sistema nervoso que regula as funções corporais automáticas, como batimentos cardíacos, digestão e pressão arterial, mantendo a homeostasia.</p>
         </div>
         <div class="topics-grid">
+            <div class="topic-card" id="topic-comparativo">
+                <div class="summary">Simpático vs. Parassimpático: Um Resumo</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <div class="flex flex-col md:flex-row gap-6 md:gap-8">
+                            <!-- Coluna Simpático -->
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-center mb-4 pb-2 border-b-2" style="color: var(--simpatico-color); border-color: var(--simpatico-border);">Divisão Simpática</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Origem dos Neurônios</h4>
+                                        <p class="text-slate-600"><span class="term" data-description="Os neurônios pré-ganglionares simpáticos se originam nos segmentos torácico (T1) e lombar (L2) da medula espinhal.">Origem Toracolombar</span>.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Tamanho dos Neurônios</h4>
+                                        <p class="text-slate-600"><strong class="font-medium text-slate-700">Pré-ganglionares:</strong> <span class="term" data-description="No sistema simpático, os neurônios pré-ganglionares são curtos, pois os gânglios estão localizados perto da medula espinhal na cadeia paravertebral.">Curtos</span>.<br><strong class="font-medium text-slate-700">Pós-ganglionares:</strong> <span class="term" data-description="No sistema simpático, os neurônios pós-ganglionares são longos para poderem alcançar os órgãos-alvo, que podem estar distantes.">Longos</span>.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Neurotransmissores</h4>
+                                        <p class="text-slate-600"><strong class="font-medium text-slate-700">No gânglio:</strong> <span class="term" data-description="Na sinapse ganglionar, tanto simpática quanto parassimpática, o neurotransmissor liberado pelo neurônio pré-ganglionar é sempre a Acetilcolina (ACh).">Acetilcolina (ACh)</span>.<br><strong class="font-medium text-slate-700">No órgão-alvo:</strong> <span class="term" data-description="Liberada pela maioria dos neurônios pós-ganglionares simpáticos, a Norepinefrina (Noradrenalina) é responsável pelos efeitos de 'luta ou fuga'.">Norepinefrina (NE)</span>.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Receptores no Órgão-Alvo</h4>
+                                        <p class="text-slate-600"><span class="term" data-description="São os receptores que respondem à Norepinefrina e Epinefrina. Dividem-se em subtipos Alfa (α) e Beta (β), cada um com funções específicas nos diferentes órgãos.">Receptores Adrenérgicos</span>.</p>
+                                    </div>
+                                     <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Função Geral</h4>
+                                        <p class="text-slate-600">"Luta ou Fuga": prepara o corpo para ação, estresse e emergências.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Coluna Parassimpático -->
+                            <div class="flex-1 mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 md:border-l border-slate-300/50 md:pl-8">
+                                <h3 class="text-2xl font-bold text-center mb-4 pb-2 border-b-2" style="color: var(--parassimpatico-color); border-color: var(--parassimpatico-border);">Divisão Parassimpática</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Origem dos Neurônios</h4>
+                                        <p class="text-slate-600"><span class="term" data-description="Os neurônios pré-ganglionares parassimpáticos se localizam no tronco encefálico (associados a nervos cranianos como o Vago) e na região sacral da medula espinhal.">Origem Craniossacral</span>.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Tamanho dos Neurônios</h4>
+                                        <p class="text-slate-600"><strong class="font-medium text-slate-700">Pré-ganglionares:</strong> <span class="term" data-description="No sistema parassimpático, os neurônios pré-ganglionares são longos, estendendo-se do SNC até muito perto ou até mesmo dentro do órgão-alvo.">Longos</span>.<br><strong class="font-medium text-slate-700">Pós-ganglionares:</strong> <span class="term" data-description="No sistema parassimpático, os neurônios pós-ganglionares são muito curtos, pois os gânglios já estão localizados no órgão-alvo, necessitando de um axônio curto.">Curtos</span>.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Neurotransmissores</h4>
+                                        <p class="text-slate-600"><strong class="font-medium text-slate-700">No gânglio:</strong> <span class="term" data-description="Na sinapse ganglionar, tanto simpática quanto parassimpática, o neurotransmissor liberado pelo neurônio pré-ganglionar é sempre a Acetilcolina (ACh).">Acetilcolina (ACh)</span>.<br><strong class="font-medium text-slate-700">No órgão-alvo:</strong> <span class="term" data-description="Na divisão parassimpática, a Acetilcolina (ACh) também é o neurotransmissor liberado no órgão-alvo, responsável pelos efeitos de 'repouso e digestão'.">Acetilcolina (ACh)</span>.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Receptores no Órgão-Alvo</h4>
+                                        <p class="text-slate-600"><span class="term" data-description="São os receptores que respondem à Acetilcolina nos órgãos-alvo da via parassimpática. Seus subtipos (M1, M2, etc.) podem gerar respostas excitatórias ou inibitórias.">Receptores Muscarínicos</span>.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-slate-800">Função Geral</h4>
+                                        <p class="text-slate-600">"Repouso e Digestão": conserva energia e promove funções de manutenção.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="topic-card" id="topic-estrutura-geral-do-sna">
                 <div class="summary">Estrutura Geral do SNA</div>
                 <div class="topic-content-wrapper">
                     <div class="topic-content">
                         <ul>
                             <li>Composto por duas vias neuronais em série: um neurônio pré-ganglionar e um pós-ganglionar.</li>
-                            <li><span class="term" data-description="O primeiro neurônio da via, cujo corpo celular está no SNC (tronco encefálico ou medula espinhal). Seu axônio se projeta para um gânglio autonômico. Geralmente é mielinizado.">Neurônio Pré-ganglionar</span></li>
-                            <li><span class="term" data-description="O segundo neurônio, cujo corpo celular está em um gânglio autonômico. Seu axônio (geralmente não mielinizado) inerva o órgão-alvo (músculo liso, cardíaco ou glândula).">Neurônio Pós-ganglionar</span></li>
+                            <li><span class="term" data-description="O primeiro neurônio da via, cujo corpo celular está no SNC. Seu axônio, geralmente mielinizado (coberto por uma bainha de mielina para condução rápida), se projeta para um gânglio autonômico.">Neurônio Pré-ganglionar</span></li>
+                            <li><span class="term" data-description="O segundo neurônio, cujo corpo celular está em um gânglio autonômico. Seu axônio, geralmente não mielinizado, inerva o órgão-alvo (músculo liso, cardíaco ou glândula).">Neurônio Pós-ganglionar</span></li>
                              <li><span class="term" data-description="Um agrupamento de corpos celulares de neurônios fora do SNC, funcionando como uma 'estação de retransmissão' para os sinais autonômicos, onde o neurônio pré-ganglionar se comunica com o pós-ganglionar.">Gânglio Autonômico</span></li>
                         </ul>
                     </div>
@@ -678,19 +826,6 @@
                             <li>Embora o SNA seja 'autônomo', ele é regulado por áreas superiores do cérebro.</li>
                             <li><span class="term" data-description="O principal centro de integração do SNA. Controla funções como temperatura corporal, sede, fome e respostas emocionais que envolvem o SNA.">Hipotálamo</span>: O comandante geral.</li>
                             <li><span class="term" data-description="Contém núcleos vitais que regulam diretamente a pressão arterial, os batimentos cardíacos, a respiração e a digestão, como o bulbo e a ponte.">Tronco Encefálico</span>: Controle direto.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="topic-card" id="topic-neurotransmissores-e-receptores">
-                <div class="summary">Neurotransmissores e Receptores</div>
-                <div class="topic-content-wrapper">
-                    <div class="topic-content">
-                        <ul>
-                            <li>A comunicação do SNA depende de moléculas químicas.</li>
-                            <li><span class="term" data-description="Moléculas mensageiras liberadas por neurônios para transmitir um sinal a outra célula através de uma sinapse. Os principais no SNA são a Acetilcolina (ACh) e a Norepinefrina (NE).">Neurotransmissores</span>: Os mensageiros.</li>
-                            <li><span class="term" data-description="Proteínas na superfície da célula-alvo que funcionam como 'fechaduras'. Quando o neurotransmissor (a 'chave') se liga, ele desencadeia uma resposta específica dentro da célula.">Receptores</span>: As fechaduras.</li>
-                            <li>Os neurônios são classificados como <span class="term" data-description="Refere-se a neurônios que sintetizam e liberam Acetilcolina (ACh).">colinérgicos</span> (liberam ACh) ou <span class="term" data-description="Refere-se a neurônios que sintetizam e liberam Norepinefrina (NE). Também se aplica a receptores que respondem a NE ou Epinefrina.">adrenérgicos</span> (liberam NE).</li>
                         </ul>
                     </div>
                 </div>
@@ -722,7 +857,7 @@
         </div>
     </section>
 
-    <!-- Sympathetic Nervous System Section -->
+    <!-- Seção do Sistema Nervoso Simpático -->
     <section id="simpatico" class="section-container">
          <div class="section-header-card">
             <h2 class="section-title">Divisão Simpática</h2>
@@ -750,18 +885,6 @@
                             <li>Neurônio pré-ganglionar libera <span class="term" data-description="A acetilcolina é o neurotransmissor usado na sinapse dentro do gânglio autonômico, atuando em receptores nicotínicos.">ACh</span>.</li>
                             <li>Neurônio pós-ganglionar libera <span class="term" data-description="A norepinefrina (ou noradrenalina) é o principal neurotransmissor liberado pelo neurônio pós-ganglionar simpático no órgão-alvo.">Norepinefrina (NE)</span>.</li>
                             <li>A ação da NE termina principalmente por <span class="term" data-description="A principal forma de encerrar o sinal simpático é através de uma proteína transportadora (NET) que bombeia a norepinefrina de volta para o neurônio que a liberou, para ser reutilizada ou degradada.">recaptação</span> no terminal do axônio.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="topic-card" id="topic-receptores-adrenergicos">
-                <div class="summary">Receptores Adrenérgicos</div>
-                <div class="topic-content-wrapper">
-                    <div class="topic-content">
-                        <ul>
-                            <li>Receptores <span class="term" data-description="Geralmente causam contração do músculo liso (vasoconstrição). Respondem mais fortemente à norepinefrina.">Alfa (α)</span>: α1 (excitatório, aumenta Ca²⁺), α2 (inibitório, diminui AMPc).</li>
-                            <li>Receptores <span class="term" data-description="Têm diferentes afinidades e efeitos. Respondem tanto à epinefrina quanto à norepinefrina.">Beta (β)</span>: β1 (no coração, aumenta FC e força), β2 (nos brônquios e vasos, causa relaxamento), β3 (no tecido adiposo, estimula a lipólise).</li>
-                            <li>A resposta do órgão depende de qual tipo de receptor ele expressa.</li>
                         </ul>
                     </div>
                 </div>
@@ -796,7 +919,7 @@
                 <div class="topic-content-wrapper">
                     <div class="topic-content">
                         <ul>
-                            <li>Devido à ampla divergência dos neurônios pré-ganglionares na cadeia simpática, o sistema pode ser ativado de forma generalizada.</li>
+                            <li>Devido à ampla <span class="term" data-description="Na neuroanatomia, divergência refere-se ao padrão onde um único neurônio pré-ganglionar faz sinapse com múltiplos neurônios pós-ganglionares. Isso permite que um único sinal do SNC seja distribuído para vários órgãos simultaneamente.">divergência</span> dos neurônios pré-ganglionares na cadeia simpática, o sistema pode ser ativado de forma generalizada.</li>
                             <li>Isso permite uma resposta rápida e coordenada em todo o corpo durante situações de estresse extremo.</li>
                             <li>Ex: Em um susto, o coração acelera, a sudorese aumenta e as pupilas dilatam, tudo ao mesmo tempo.</li>
                         </ul>
@@ -806,7 +929,7 @@
         </div>
     </section>
 
-    <!-- Parasympathetic Nervous System Section -->
+    <!-- Seção do Sistema Nervoso Parassimpático -->
     <section id="parassimpatico" class="section-container">
         <div class="section-header-card">
             <h2 class="section-title">Divisão Parassimpática</h2>
@@ -833,18 +956,6 @@
                         <ul>
                             <li>Tanto o neurônio pré quanto o pós-ganglionar liberam <span class="term" data-description="A acetilcolina é o neurotransmissor em ambas as sinapses (ganglionar e no órgão-alvo) da via parassimpática.">Acetilcolina (ACh)</span>.</li>
                             <li>A ação da ACh é encerrada rapidamente pela enzima <span class="term" data-description="A acetilcolinesterase está presente na fenda sináptica e quebra rapidamente a ACh em colina e acetato, encerrando o sinal. Isso contribui para a natureza localizada das respostas parassimpáticas.">AChE</span>.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="topic-card" id="topic-receptores-colinergicos">
-                <div class="summary">Receptores Colinérgicos</div>
-                <div class="topic-content-wrapper">
-                    <div class="topic-content">
-                        <ul>
-                            <li>Receptor no gânglio é <span class="term" data-description="O receptor na sinapse ganglionar é do tipo nicotínico. Ele é um canal iônico que, ao ser ativado pela ACh, sempre causa uma resposta excitatória no neurônio pós-ganglionar.">Nicotínico (RACh-N)</span>.</li>
-                            <li>Receptor no órgão-alvo é <span class="term" data-description="O receptor no órgão efetor é do tipo muscarínico. Ele é acoplado à proteína G e pode ser tanto excitatório (ex: contração do TGI) quanto inibitório (ex: diminuição da FC), dependendo do subtipo e do tecido.">Muscarínico (RACh-M)</span>.</li>
-                            <li>Existem múltiplos subtipos de receptores muscarínicos (M1-M5) com diferentes localizações e funções.</li>
                         </ul>
                     </div>
                 </div>
@@ -890,7 +1001,135 @@
         </div>
     </section>
 
-    <!-- Quiz Section -->
+    <!-- Nova Seção: Neurotransmissores e Receptores -->
+    <section id="neurotransmissores-receptores" class="section-container">
+        <div class="section-header-card">
+            <h2 class="section-title">A Linguagem Química do SNA</h2>
+            <p class="section-subtitle">Mergulhe nos detalhes da comunicação do SNA, explorando os neurotransmissores e os receptores que ditam as ações em cada órgão.</p>
+        </div>
+        <div class="topics-grid">
+            <div class="topic-card" id="topic-classificacao-neuronios-receptores">
+                <div class="summary">Classificação de Neurônios e Receptores</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Os neurônios e receptores do SNA são classificados com base no neurotransmissor que liberam ou ao qual respondem.</li>
+                            <li><span class="term" data-description="Refere-se a neurônios que sintetizam e liberam Acetilcolina (ACh) ou a receptores que respondem à ACh. Inclui todos os neurônios pré-ganglionares e todos os pós-ganglionares parassimpáticos.">Colinérgicos</span>: Relacionados à Acetilcolina (ACh).</li>
+                            <li><span class="term" data-description="Refere-se a neurônios que sintetizam e liberam Norepinefrina (NE) ou a receptores que respondem à NE ou Epinefrina. Inclui a maioria dos neurônios pós-ganglionares simpáticos.">Adrenérgicos</span>: Relacionados à Norepinefrina (NE) e Epinefrina (Adrenalina).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-receptores-colinergicos-nicotinicos">
+                <div class="summary">Receptores Colinérgicos: Nicotínicos</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>São receptores <span class="term" data-description="Um tipo de receptor que também é um canal iônico. Quando o neurotransmissor se liga, o canal se abre instantaneamente, permitindo a passagem de íons e causando uma resposta muito rápida.">ionotrópicos</span>, o que significa que formam um canal iônico de ação rápida.</li>
+                            <li>Sempre causam uma <span class="term" data-description="É um processo que torna o potencial de membrana da célula menos negativo (mais próximo de zero), aumentando a probabilidade de que um neurônio dispare um potencial de ação.">resposta excitatória (despolarização)</span> na célula seguinte.</li>
+                            <li><strong class="font-semibold text-slate-700">Onde são encontrados?</strong> Nos <span class="term" data-description="A sinapse entre o neurônio pré-ganglionar e o pós-ganglionar, tanto na via simpática quanto na parassimpática.">gânglios autonômicos</span> de AMBAS as divisões (simpática e parassimpática) e na junção neuromuscular do sistema somático.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-receptores-colinergicos-muscarinicos">
+                <div class="summary">Receptores Colinérgicos: Muscarínicos</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>São receptores <span class="term" data-description="Um tipo de receptor que não é um canal. Ele ativa uma cascata de sinalização intracelular (via Proteína G) que, indiretamente, abre ou fecha canais iônicos. A resposta é mais lenta e modulada.">metabotrópicos</span>, acoplados à Proteína G, com respostas mais lentas e diversificadas.</li>
+                            <li>Podem ser excitatórios ou inibitórios, dependendo do subtipo do receptor e da célula-alvo.</li>
+                             <li><strong class="font-semibold text-slate-700">Onde são encontrados?</strong> Nos órgãos-alvo da divisão <span class="term" data-description="Os receptores muscarínicos são a 'fechadura' final da via parassimpática, mediando os efeitos de 'repouso e digestão' como a diminuição da frequência cardíaca e o aumento da motilidade gástrica.">parassimpática</span>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-receptores-adrenergicos">
+                <div class="summary">Receptores Adrenérgicos: Alfa e Beta</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>Todos são receptores <span class="term" data-description="Assim como os muscarínicos, os receptores adrenérgicos são acoplados à Proteína G, gerando respostas mais lentas e complexas através de segundos mensageiros como o AMPc ou o cálcio.">metabotrópicos</span> acoplados à Proteína G.</li>
+                            <li><strong class="font-semibold text-slate-700">Onde são encontrados?</strong> Nos órgãos-alvo da divisão <span class="term" data-description="Os receptores adrenérgicos são a 'fechadura' final da via simpática, mediando os efeitos de 'luta ou fuga' como o aumento da frequência cardíaca (β1), vasoconstrição (α1) e broncodilatação (β2).">simpática</span>.</li>
+                            <li><span class="term" data-description="Geralmente causam contração do músculo liso (vasoconstrição). Respondem mais fortemente à norepinefrina. Ativam a via do IP3/DAG, aumentando o cálcio intracelular.">Receptores Alfa (α)</span>: α1 (excitatório, aumenta Ca²⁺), α2 (inibitório, diminui AMPc).</li>
+                            <li><span class="term" data-description="Têm diferentes afinidades e efeitos, geralmente modulando a atividade da adenilil ciclase e os níveis de AMPc. Respondem tanto à epinefrina quanto à norepinefrina.">Receptores Beta (β)</span>: β1 (no coração, aumenta FC e força), β2 (nos brônquios e vasos, causa relaxamento), β3 (no tecido adiposo).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-ionotropicos-metabotropicos">
+                <div class="summary">Ionotrópicos vs. Metabotrópicos</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li><strong class="font-semibold text-slate-700">Ionotrópicos (ex: Nicotínicos):</strong>
+                                <ul>
+                                    <li>O próprio receptor é um <span class="term" data-description="Uma proteína de membrana que forma um poro ou portão, permitindo que íons específicos (como Na+, K+, Ca2+) passem através da membrana celular quando aberto.">canal iônico</span>.</li>
+                                    <li><span class="term" data-description="A ligação do neurotransmissor abre o canal imediatamente, sem intermediários. O efeito é quase instantâneo, ideal para respostas rápidas.">Ação direta</span> e muito rápida.</li>
+                                    <li>Função: Transmissão rápida de sinal, como no gânglio.</li>
+                                </ul>
+                            </li>
+                            <li><strong class="font-semibold text-slate-700">Metabotrópicos (ex: Muscarínicos, Adrenérgicos):</strong>
+                                <ul>
+                                    <li>O receptor ativa uma <span class="term" data-description="Uma família de proteínas que atuam como intermediários. Quando ativadas por um receptor, elas iniciam uma cascata de sinalização dentro da célula, ativando outras enzimas e proteínas.">Proteína G</span> e uma cascata de <span class="term" data-description="Moléculas intracelulares (como AMPc, Cálcio, IP3) que são geradas em resposta à ativação do receptor e que amplificam e transmitem o sinal dentro da célula.">segundos mensageiros</span>.</li>
+                                    <li><span class="term" data-description="A ligação do neurotransmissor inicia uma série de passos bioquímicos antes que o efeito final (como a abertura de um canal) ocorra. Isso torna a resposta mais lenta, mas também mais versátil.">Ação indireta</span> e mais lenta.</li>
+                                    <li>Função: <span class="term" data-description="Em vez de apenas ligar/desligar um sinal, os receptores metabotrópicos podem modular a excitabilidade da célula, a expressão gênica e outras funções a longo prazo, ajustando finamente a resposta celular.">Modulação da atividade celular</span>, com efeitos mais duradouros e complexos.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card" id="topic-ganglios-autonomicos">
+                <div class="summary">Gânglios Autonômicos</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <ul>
+                            <li>São "estações de retransmissão" onde o neurônio pré-ganglionar (vindo do SNC) se comunica com o neurônio pós-ganglionar.</li>
+                            <li>Essa sinapse sempre usa <span class="term" data-description="A Acetilcolina (ACh) é o neurotransmissor universal nos gânglios autonômicos.">ACh</span> como neurotransmissor e <span class="term" data-description="Os receptores nicotínicos garantem uma transmissão rápida e excitatória do sinal do primeiro para o segundo neurônio da via autonômica.">receptores nicotínicos</span>.</li>
+                            <li>No sistema <strong class="text-slate-700">simpático</strong>, os gânglios estão próximos à medula (Cadeia Paravertebral).</li>
+                            <li>No sistema <strong class="text-slate-700">parassimpático</strong>, os gânglios estão próximos ou dentro dos órgãos-alvo.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <div class="topic-card" id="topic-resumo-receptores">
+                <div class="summary">Resumo dos Receptores do SNA</div>
+                <div class="topic-content-wrapper">
+                    <div class="topic-content">
+                        <div class="space-y-6">
+                            <!-- Nicotínico -->
+                            <div>
+                                <h3 class="text-xl font-bold mb-2 pb-2 border-b-2" style="color: var(--parassimpatico-color); border-color: var(--parassimpatico-border);">Receptor Nicotínico</h3>
+                                <p><strong class="font-medium text-slate-700">Neurotransmissor:</strong> <span class="term" data-description="O único neurotransmissor que ativa os receptores nicotínicos nesta via.">Acetilcolina (ACh)</span></p>
+                                <p><strong class="font-medium text-slate-700">Localização/Efeito:</strong> Encontrado nos <span class="term" data-description="A sinapse entre os neurônios pré e pós-ganglionares de ambas as divisões (simpática e parassimpática).">gânglios autonômicos</span>. A ativação é sempre rápida e <span class="term" data-description="Sempre causa uma despolarização, excitando o neurônio pós-ganglionar para que ele dispare um potencial de ação.">excitatória</span>.</p>
+                            </div>
+                            <!-- Muscarínico -->
+                            <div>
+                                <h3 class="text-xl font-bold mb-2 pb-2 border-b-2" style="color: var(--parassimpatico-color); border-color: var(--parassimpatico-border);">Receptor Muscarínico</h3>
+                                <p><strong class="font-medium text-slate-700">Neurotransmissor:</strong> <span class="term" data-description="O neurotransmissor que ativa os receptores muscarínicos na junção neuroefetora parassimpática.">Acetilcolina (ACh)</span></p>
+                                <p><strong class="font-medium text-slate-700">Localização/Efeito:</strong> Encontrado nos <span class="term" data-description="Músculo liso, músculo cardíaco e glândulas inervadas pela via parassimpática.">órgãos-alvo parassimpáticos</span>. A resposta é lenta, podendo ser <span class="term" data-description="Dependendo do subtipo do receptor e do tecido, pode tanto excitar (ex: contração do intestino) quanto inibir (ex: diminuição da frequência cardíaca).">excitatória ou inibitória</span>.</p>
+                            </div>
+                            <!-- Adrenérgico Alfa -->
+                            <div>
+                                <h3 class="text-xl font-bold mb-2 pb-2 border-b-2" style="color: var(--simpatico-color); border-color: var(--simpatico-border);">Receptor Adrenérgico α (Alfa)</h3>
+                                <p><strong class="font-medium text-slate-700">Neurotransmissor:</strong> <span class="term" data-description="Os receptores alfa têm maior afinidade pela Norepinefrina em comparação com a Epinefrina.">Norepinefrina (NE)</span></p>
+                                <p><strong class="font-medium text-slate-700">Localização/Efeito:</strong> Principalmente em <span class="term" data-description="A ativação dos receptores α1 causa a contração do músculo liso dos vasos, levando à vasoconstrição.">músculo liso vascular</span> e outros tecidos. A ativação (α1) geralmente causa <span class="term" data-description="Estreitamento dos vasos sanguíneos, que aumenta a pressão arterial e redireciona o fluxo de sangue.">vasoconstrição</span>.</p>
+                            </div>
+                            <!-- Adrenérgico Beta -->
+                            <div>
+                                <h3 class="text-xl font-bold mb-2 pb-2 border-b-2" style="color: var(--simpatico-color); border-color: var(--simpatico-border);">Receptor Adrenérgico β (Beta)</h3>
+                                <p><strong class="font-medium text-slate-700">Neurotransmissor:</strong> <span class="term" data-description="Os receptores beta respondem tanto à Norepinefrina quanto à Epinefrina (adrenalina), com diferentes afinidades dependendo do subtipo.">Norepinefrina (NE) e Epinefrina</span></p>
+                                <p><strong class="font-medium text-slate-700">Localização/Efeito:</strong> Encontrados no <span class="term" data-description="Receptores β1 no coração aumentam a frequência e a força dos batimentos.">coração (β1)</span>, <span class="term" data-description="Receptores β2 nos brônquios causam relaxamento, facilitando a respiração.">brônquios (β2)</span> e <span class="term" data-description="Receptores β3 no tecido adiposo estimulam a quebra de gordura para fornecer energia.">tecido adiposo (β3)</span>. Os efeitos variam, incluindo aumento da frequência cardíaca e relaxamento do músculo liso.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção do Quiz -->
     <section id="quiz-section" class="section-container">
         <div class="section-header-card">
             <h2 class="section-title">Teste seu Conhecimento</h2>
@@ -898,11 +1137,19 @@
         </div>
 
         <div id="quiz-area" class="w-full max-w-3xl flex flex-col items-center">
+            
+            <div id="progress-bar-container">
+                <div id="progress-bar-fill" style="width: 0%;">0%</div>
+            </div>
+            <div id="progress-label">Progresso: 0 de 60 questões dominadas</div>
+
             <div id="quiz-container" class="quiz-container hidden">
-                <div id="quiz-timer">30</div>
+                <div id="timer-display">30</div>
+                <div id="question-counter-display"></div>
                 <h3 id="quiz-question"></h3>
                 <ul id="quiz-options"></ul>
             </div>
+
             <div id="quiz-results" class="quiz-container hidden">
                 <h3>Quiz Finalizado!</h3>
                 <div id="quiz-percentage">100%</div>
@@ -914,30 +1161,35 @@
                 <ul id="missed-topics-list"></ul>
                  <button id="restart-quiz-btn">Novo Quiz</button>
             </div>
-            <button id="quiz-start-btn">Começar Quiz</button>
+
+            <div id="start-area" class="flex flex-col items-center">
+                 <button id="quiz-start-btn">Começar Quiz</button>
+                 <button id="reset-progress-btn">Zerar Progresso</button>
+            </div>
+
         </div>
     </section>
 
 
-    <!-- Footer -->
+    <!-- Rodapé -->
     <footer class="footer-signature">
-        <p>Feito por Rafael Chaves Sebe</p>
+        <p>Feito por Rafael Chaves Sebe.</p>
     </footer>
 
-    <!-- Modal Structure -->
+    <!-- Estrutura do Modal -->
     <div id="modal-overlay" class="fixed inset-0">
         <div id="modal-content" class="relative">
             <div id="modal-header" class="relative">
                 <h3 id="modal-title"></h3>
-                <button id="modal-close-btn" class="absolute top-4 right-4">&times;</button>
             </div>
             <p id="modal-description"></p>
+             <button id="modal-close-btn" class="absolute top-4 right-4 z-20">&times;</button>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Observer for section background changes
+            // Observer para mudanças de fundo da seção
             const bgObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const glowId = `bg-${entry.target.id}`;
@@ -952,29 +1204,27 @@
                 });
             }, { threshold: 0.4 }); 
 
-            document.querySelectorAll('#common, #simpatico, #parassimpatico').forEach(section => {
+            document.querySelectorAll('#common, #simpatico, #parassimpatico, #neurotransmissores-receptores').forEach(section => {
                 bgObserver.observe(section);
             });
 
-            // Observer for card animations
+            // Observer para animações dos cards
             const cardObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                    } else {
-                        entry.target.classList.remove('visible'); 
+                    } else if (entry.boundingClientRect.top > 0) {
+                        entry.target.classList.remove('visible');
                     }
                 });
             }, {
-                threshold: 0.1,
-                rootMargin: "0px 0px -50px 0px"
+                threshold: 0.01
             });
             document.querySelectorAll('.topic-card, .section-header-card').forEach(card => {
                 cardObserver.observe(card);
             });
 
-
-            // Modal logic
+            // Lógica do Modal
             const terms = document.querySelectorAll('.term');
             const modalOverlay = document.getElementById('modal-overlay');
             const modalContent = document.getElementById('modal-content');
@@ -993,6 +1243,7 @@
                     if (parentSection && parentSection.id) {
                        if (parentSection.id === 'simpatico') theme = 'simpatico';
                        else if (parentSection.id === 'parassimpatico') theme = 'parassimpatico';
+                       else if (parentSection.id === 'neurotransmissores-receptores') theme = 'neurotransmissores-receptores';
                     }
 
                     modalTitle.textContent = title;
@@ -1023,7 +1274,7 @@
                 if (event.target === modalOverlay) closeModal();
             });
             
-            // Accordion logic
+            // Lógica do Acordeão
             document.querySelectorAll('.topic-card .summary').forEach(summary => {
                 summary.addEventListener('click', (e) => {
                     const card = e.currentTarget.parentElement;
@@ -1055,135 +1306,206 @@
             }
             
             // ===================================
-            // == QUIZ LOGIC
+            // == LÓGICA DO QUIZ (APRIMORADA)
             // ===================================
+
             const questionBank = [
-                // Estrutura Geral do SNA
-                { question: "Qual é a sequência correta de neurônios na via eferente do SNA?", topic: "Estrutura Geral do SNA", options: ["Pós-ganglionar -> Gânglio -> Pré-ganglionar", "Pré-ganglionar -> Pós-ganglionar -> Órgão-alvo", "SNC -> Pós-ganglionar -> Gânglio", "Pré-ganglionar -> Gânglio -> Pós-ganglionar", "Gânglio -> Pré-ganglionar -> Pós-ganglionar"], correctAnswer: 3, originalIndex: 0 },
-                { question: "O corpo celular do neurônio pós-ganglionar está localizado em qual estrutura?", topic: "Estrutura Geral do SNA", options: ["Na medula espinhal", "No tronco encefálico", "No órgão-alvo", "No cerebelo", "Em um gânglio autonômico"], correctAnswer: 4, originalIndex: 1 },
-                // Controle Antagonista
-                { question: "O que significa dizer que as divisões simpática e parassimpática exercem um 'controle antagonista'?", topic: "Controle Antagonista", options: ["Ambas as divisões estimulam os mesmos órgãos", "Uma divisão estimula uma resposta, enquanto a outra a inibe", "Elas trabalham em momentos diferentes do dia", "Apenas uma divisão inerva cada órgão", "Elas usam os mesmos neurotransmissores"], correctAnswer: 1, originalIndex: 2 },
-                { question: "Qual o principal objetivo do 'Balanço Autonômico' entre as divisões do SNA?", topic: "Controle Antagonista", options: ["Manter a homeostasia", "Acelerar o metabolismo", "Promover o crescimento muscular", "Melhorar a memória", "Aumentar a pressão arterial"], correctAnswer: 0, originalIndex: 3 },
-                // Centros de Controle
-                { question: "Qual parte do tronco encefálico contém centros vitais para o controle direto da respiração e dos batimentos cardíacos?", topic: "Centros de Controle", options: ["Cerebelo", "Hipotálamo", "Bulbo e Ponte", "Tálamo", "Córtex motor"], correctAnswer: 2, originalIndex: 4 },
-                { question: "O hipotálamo, principal centro integrador do SNA, regula funções como:", topic: "Centros de Controle", options: ["Movimentos voluntários e fala", "Visão e audição", "Memória de longo prazo", "Temperatura corporal, fome e sede", "Equilíbrio e coordenação motora"], correctAnswer: 3, originalIndex: 5 },
-                // Neurotransmissores e Receptores
-                { question: "Um neurônio que libera norepinefrina (NE) é classificado como:", topic: "Neurotransmissores e Receptores", options: ["Colinérgico", "Dopaminérgico", "Adrenérgico", "Serotoninérgico", "GABAérgico"], correctAnswer: 2, originalIndex: 6 },
-                { question: "O que são receptores no contexto do SNA?", topic: "Neurotransmissores e Receptores", options: ["Células que geram impulsos nervosos", "Moléculas que transportam oxigênio", "Proteínas na célula-alvo que se ligam aos neurotransmissores", "As próprias moléculas neurotransmissoras", "Os gânglios autonômicos"], correctAnswer: 2, originalIndex: 7 },
-                // Controle Tônico
-                { question: "No controle tônico dos vasos sanguíneos, o que acontece se a frequência do sinal simpático diminuir?", topic: "Controle Tônico", options: ["Vasoconstrição", "Vasodilatação", "Nenhuma alteração", "Aumento da pressão arterial", "Contração do músculo esquelético"], correctAnswer: 1, originalIndex: 8 },
-                { question: "O conceito de 'tônus' no controle tônico refere-se a:", topic: "Controle Tônico", options: ["Um sinal que liga e desliga rapidamente", "Um nível basal de atividade que pode ser modulado", "A força máxima de contração de um músculo", "A ausência total de atividade nervosa", "Um controle exclusivamente parassimpático"], correctAnswer: 1, originalIndex: 9 },
-                // Junção Neuroefetora
-                { question: "Qual a principal característica da junção neuroefetora autonômica que permite influenciar uma grande área de tecido?", topic: "Junção Neuroefetora", options: ["Sinapses elétricas diretas", "A presença de muitos dendritos", "A ausência de neurotransmissores", "A presença de varicosidades ao longo do axônio", "O neurônio pós-ganglionar ser mielinizado"], correctAnswer: 3, originalIndex: 10 },
-                { question: "Diferente da junção neuromuscular, a junção neuroefetora do SNA resulta em:", topic: "Junção Neuroefetora", options: ["Uma resposta mais rápida e localizada", "Uma liberação de neurotransmissor mais difusa sobre o tecido", "O uso exclusivo de acetilcolina", "A contração apenas de músculo esquelético", "Uma comunicação que não usa receptores"], correctAnswer: 1, originalIndex: 11 },
-                // Origem e Anatomia (Simpático)
-                { question: "A divisão simpática do SNA tem origem em quais segmentos da medula espinhal?", topic: "Origem e Anatomia (Simpático)", options: ["Cervical e Torácica", "Torácica e Lombar", "Lombar e Sacral", "Craniossacral", "Apenas Craniana"], correctAnswer: 1, originalIndex: 12 },
-                { question: "Na divisão simpática, os neurônios pré-ganglionares são tipicamente ____ e os pós-ganglionares são ____.", topic: "Origem e Anatomia (Simpático)", options: ["longos, curtos", "curtos, longos", "longos, longos", "curtos, curtos", "mielinizados, não mielinizados"], correctAnswer: 1, originalIndex: 13 },
-                // Neurotransmissores (Simpático)
-                { question: "Qual neurotransmissor é liberado pelo neurônio pré-ganglionar SIMPÁTICO no gânglio?", topic: "Neurotransmissores (Simpático)", options: ["Norepinefrina (NE)", "Epinefrina", "Dopamina", "Acetilcolina (ACh)", "Serotonina"], correctAnswer: 3, originalIndex: 14 },
-                { question: "Como a ação da Norepinefrina (NE) na fenda sináptica é primariamente terminada?", topic: "Neurotransmissores (Simpático)", options: ["Por difusão para fora da fenda", "Por degradação enzimática pela AChE", "Por recaptação no terminal do axônio", "Por ligação a receptores pré-sinápticos", "Por ação do sistema parassimpático"], correctAnswer: 2, originalIndex: 15 },
-                // Receptores Adrenérgicos
-                { question: "A ativação de receptores Beta-1 (β1) no coração causa qual efeito?", topic: "Receptores Adrenérgicos", options: ["Diminuição da frequência cardíaca", "Vasoconstrição coronariana", "Aumento da frequência e força de contração", "Relaxamento do músculo cardíaco", "Broncoconstrição"], correctAnswer: 2, originalIndex: 16 },
-                { question: "Qual receptor adrenérgico é o principal alvo para causar relaxamento do músculo liso dos brônquios (broncodilatação)?", topic: "Receptores Adrenérgicos", options: ["Alfa-1 (α1)", "Alfa-2 (α2)", "Beta-1 (β1)", "Beta-2 (β2)", "Beta-3 (β3)"], correctAnswer: 3, originalIndex: 17 },
-                // Medula Suprarrenal
-                { question: "As células cromafins da medula suprarrenal são funcionalmente análogas a:", topic: "Medula Suprarrenal", options: ["Neurônios pré-ganglionares simpáticos", "Neurônios pós-ganglionares simpáticos", "Células da glia", "Neurônios pré-ganglionares parassimpáticos", "Células musculares lisas"], correctAnswer: 1, originalIndex: 18 },
-                { question: "A liberação de epinefrina pela medula suprarrenal na corrente sanguínea tem como efeito:", topic: "Medula Suprarrenal", options: ["Uma resposta rápida e de curta duração", "Uma resposta localizada apenas no abdômen", "Reforçar e prolongar a resposta simpática", "Ativar a resposta de 'repouso e digestão'", "Diminuir os níveis de glicose no sangue"], correctAnswer: 2, originalIndex: 19 },
-                // Resposta de "Luta ou Fuga"
-                { question: "Durante a resposta de 'luta ou fuga', o que acontece com o fluxo sanguíneo?", topic: "Resposta de \"Luta ou Fuga\"", options: ["Aumenta para o sistema digestivo", "É desviado para a pele e rins", "É redirecionado para os músculos esqueléticos, coração e cérebro", "Diminui uniformemente em todo o corpo", "Permanece inalterado"], correctAnswer: 2, originalIndex: 20 },
-                { question: "Qual processo metabólico é ativado pelo sistema simpático para fornecer energia rápida?", topic: "Resposta de \"Luta ou Fuga\"", options: ["Glicogênese (formação de glicogênio)", "Lipogênese (formação de gordura)", "Digestão de proteínas", "Absorção de nutrientes", "Glicogenólise (quebra de glicogênio)"], correctAnswer: 4, originalIndex: 21 },
-                // Descarga em Massa
-                { question: "O que permite que o sistema simpático atue em 'descarga em massa', ativando múltiplos órgãos simultaneamente?", topic: "Descarga em Massa", options: ["A lentidão de seus neurotransmissores", "A ausência de gânglios", "A ampla divergência dos neurônios pré-ganglionares", "O controle exclusivo pelo córtex cerebral", "Seus neurônios pós-ganglionares curtos"], correctAnswer: 2, originalIndex: 22 },
-                { question: "Qual das seguintes situações é um exemplo de descarga em massa simpática?", topic: "Descarga em Massa", options: ["A digestão lenta de uma refeição", "O ato de focar a visão em um livro", "O aumento da salivação ao ver comida", "A resposta a um susto repentino (coração acelerado, sudorese)", "O sono profundo"], correctAnswer: 3, originalIndex: 23 },
-                // Origem e Anatomia (Parassimpático)
-                { question: "A divisão parassimpática possui uma origem chamada:", topic: "Origem e Anatomia (Parassimpático)", options: ["Toracolombar", "Lombossacral", "Cervicotorácica", "Craniossacral", "Apenas medular"], correctAnswer: 3, originalIndex: 24 },
-                { question: "Onde estão localizados os gânglios da divisão parassimpática?", topic: "Origem e Anatomia (Parassimpático)", options: ["Em uma cadeia ao lado da medula espinhal", "Próximos ou dentro dos órgãos-alvo", "Apenas no cérebro", "Na medula suprarrenal", "Junto às raízes dorsais dos nervos espinhais"], correctAnswer: 1, originalIndex: 25 },
-                // Neurotransmissores (Parassimpático)
-                { question: "Qual neurotransmissor é utilizado em AMBAS as sinapses (ganglionar e neuroefetora) da via parassimpática?", topic: "Neurotransmissores (Parassimpático)", options: ["Norepinefrina", "Dopamina", "Acetilcolina", "Serotonina", "Epinefrina"], correctAnswer: 2, originalIndex: 26 },
-                { question: "A ação da acetilcolina na junção neuroefetora parassimpática é rapidamente terminada pela enzima:", topic: "Neurotransmissores (Parassimpático)", options: ["Monoamina oxidase (MAO)", "Catecol-O-metiltransferase (COMT)", "Acetilcolinesterase (AChE)", "Dopa descarboxilase", "Tirosina hidroxilase"], correctAnswer: 2, originalIndex: 27 },
-                // Receptores Colinérgicos
-                { question: "O receptor para acetilcolina no órgão-alvo da via parassimpática é do tipo:", topic: "Receptores Colinérgicos", options: ["Nicotínico", "Adrenérgico Alfa", "Adrenérgico Beta", "Muscarínico", "Dopaminérgico"], correctAnswer: 3, originalIndex: 28 },
-                { question: "Nos gânglios autonômicos, tanto simpáticos quanto parassimpáticos, o receptor colinérgico é sempre do tipo:", topic: "Receptores Colinérgicos", options: ["Muscarínico M1", "Muscarínico M2", "Nicotínico", "Adrenérgico", "Sensorial"], correctAnswer: 2, originalIndex: 29 },
-                // Função de "Repouso e Digestão"
-                { question: "Qual das seguintes ações é característica da função de 'repouso e digestão' parassimpática?", topic: "Função de \"Repouso e Digestão\"", options: ["Aumento da frequência cardíaca", "Dilatação da pupila (midríase)", "Aumento da motilidade e secreções do TGI", "Redução do fluxo sanguíneo para o intestino", "Liberação de glicose pelo fígado"], correctAnswer: 2, originalIndex: 30 },
-                { question: "A ativação parassimpática nos pulmões causa:", topic: "Função de \"Repouso e Digestão\"", options: ["Broncodilatação", "Aumento da capacidade respiratória", "Broncoconstrição", "Diminuição da produção de muco", "Aumento da frequência respiratória"], correctAnswer: 2, originalIndex: 31 },
-                // Controle Específico
-                { question: "Por que as respostas parassimpáticas são geralmente mais localizadas e específicas do que as simpáticas?", topic: "Controle Específico", options: ["Porque usam neurotransmissores mais lentos", "Devido à anatomia da via, com gânglios próximos ao alvo", "Porque são controladas por uma área diferente do cérebro", "Porque não possuem gânglios", "Porque a descarga em massa é mais comum"], correctAnswer: 1, originalIndex: 32 },
-                { question: "A capacidade de ativar a digestão sem afetar significativamente o coração é um exemplo de qual característica parassimpática?", topic: "Controle Específico", options: ["Controle antagonista", "Descarga em massa", "Controle tônico", "Controle específico e localizado", "Origem toracolombar"], correctAnswer: 3, originalIndex: 33 },
-                // O Nervo Vago (Nervo X)
-                { question: "Qual a importância do Nervo Vago (X) para a divisão parassimpática?", topic: "O Nervo Vago (Nervo X)", options: ["Ele inerva apenas a cabeça e o pescoço", "Ele é o único nervo parassimpático", "Ele carrega cerca de 75% de todas as fibras parassimpáticas", "Ele é responsável pelas respostas de 'luta ou fuga'", "Ele libera apenas norepinefrina"], correctAnswer: 2, originalIndex: 34 },
-                { question: "O 'tônus vagal' é um termo que descreve a influência parassimpática constante sobre qual órgão?", topic: "O Nervo Vago (Nervo X)", options: ["Fígado", "Intestino", "Pulmões", "Coração", "Rins"], correctAnswer: 3, originalIndex: 35 },
+                // === NÍVEL FÁCIL (20 Questões) ===
+                { id: 1, difficulty: 'Fácil', question: "Qual é a sequência correta de neurônios na via eferente do SNA?", topic: "Estrutura Geral do SNA", options: ["Pós-ganglionar -> Gânglio -> Pré-ganglionar", "SNC -> Pós-ganglionar -> Gânglio", "Gânglio -> Pré-ganglionar -> Pós-ganglionar", "Pré-ganglionar -> Gânglio -> Pós-ganglionar"], correctAnswer: 3 },
+                { id: 2, difficulty: 'Fácil', question: "Qual tipo de receptor é encontrado nos gânglios autonômicos, tanto simpáticos quanto parassimpáticos?", topic: "Receptores Colinérgicos: Nicotínicos", options: ["Muscarínico", "Adrenérgico Alfa", "Adrenérgico Beta", "Nicotínico"], correctAnswer: 3 },
+                { id: 3, difficulty: 'Fácil', question: "O que significa dizer que as divisões simpática e parassimpática exercem um 'controle antagonista'?", topic: "Controle Antagonista", options: ["Ambas estimulam os mesmos órgãos", "Uma estimula uma resposta, enquanto a outra a inibe", "Trabalham em momentos diferentes do dia", "Apenas uma divisão inerva cada órgão"], correctAnswer: 1 },
+                { id: 4, difficulty: 'Fácil', question: "A divisão simpática é frequentemente associada a qual resposta?", topic: "Resposta de \"Luta ou Fuga\"", options: ["Repouso e digestão", "Luta ou fuga", "Construção de memórias", "Controle motor fino"], correctAnswer: 1 },
+                { id: 5, difficulty: 'Fácil', question: "O hipotálamo, principal centro integrador do SNA, regula funções como:", topic: "Centros de Controle", options: ["Movimentos voluntários e fala", "Visão e audição", "Temperatura corporal, fome e sede", "Equilíbrio e coordenação"], correctAnswer: 2 },
+                { id: 6, difficulty: 'Fácil', question: "Receptores que respondem à Acetilcolina (ACh) são classificados como...", topic: "Classificação de Neurônios e Receptores", options: ["Adrenérgicos", "Dopaminérgicos", "Colinérgicos", "Serotoninérgicos"], correctAnswer: 2 },
+                { id: 7, difficulty: 'Fácil', question: "Qual neurotransmissor é o principal mensageiro da divisão parassimpática no órgão-alvo?", topic: "Neurotransmissores (Parassimpático)", options: ["Norepinefrina", "Dopamina", "Acetilcolina", "Serotonina"], correctAnswer: 2 },
+                { id: 8, difficulty: 'Fácil', question: "A divisão simpática do SNA tem origem em quais segmentos da medula espinhal?", topic: "Origem e Anatomia (Simpático)", options: ["Cervical e Torácica", "Torácica e Lombar", "Lombar e Sacral", "Craniossacral"], correctAnswer: 1 },
+                { id: 9, difficulty: 'Fácil', question: "Na divisão simpática, os neurônios pré-ganglionares são tipicamente ____ e os pós-ganglionares são ____.", topic: "Simpático vs. Parassimpático: Um Resumo", options: ["longos, curtos", "curtos, longos", "longos, longos", "curtos, curtos"], correctAnswer: 1 },
+                { id: 10, difficulty: 'Fácil', question: "A ativação de receptores Beta-1 (β1) no coração causa qual efeito?", topic: "Receptores Adrenérgicos: Alfa e Beta", options: ["Diminuição da frequência cardíaca", "Vasoconstrição coronariana", "Aumento da frequência e força de contração", "Relaxamento do músculo cardíaco"], correctAnswer: 2 },
+                { id: 11, difficulty: 'Fácil', question: "Durante a resposta de 'luta ou fuga', o que acontece com as pupilas?", topic: "Resposta de \"Luta ou Fuga\"", options: ["Elas se contraem (miose)", "Elas dilatam (midríase)", "Permanecem inalteradas", "Piscam rapidamente"], correctAnswer: 1 },
+                { id: 12, difficulty: 'Fácil', question: "Qual processo metabólico é ativado pelo sistema simpático para fornecer energia rápida?", topic: "Resposta de \"Luta ou Fuga\"", options: ["Formação de glicogênio", "Formação de gordura", "Digestão de proteínas", "Quebra de glicogênio (Glicogenólise)"], correctAnswer: 3 },
+                { id: 13, difficulty: 'Fácil', question: "Qual das seguintes situações é um exemplo de descarga em massa simpática?", topic: "Descarga em Massa", options: ["A digestão lenta de uma refeição", "Focar a visão em um livro", "O aumento da salivação", "A resposta a um susto repentino"], correctAnswer: 3 },
+                { id: 14, difficulty: 'Fácil', question: "A divisão parassimpática possui uma origem chamada:", topic: "Origem e Anatomia (Parassimpático)", options: ["Toracolombar", "Lombossacral", "Cervicotorácica", "Craniossacral"], correctAnswer: 3 },
+                { id: 15, difficulty: 'Fácil', question: "Onde estão localizados os gânglios da divisão parassimpática?", topic: "Origem e Anatomia (Parassimpático)", options: ["Em uma cadeia ao lado da medula espinhal", "Próximos ou dentro dos órgãos-alvo", "Apenas no cérebro", "Na medula suprarrenal"], correctAnswer: 1 },
+                { id: 16, difficulty: 'Fácil', question: "O receptor para acetilcolina no órgão-alvo da via parassimpática é do tipo:", topic: "Receptores Colinérgicos: Muscarínicos", options: ["Nicotínico", "Adrenérgico Alfa", "Adrenérgico Beta", "Muscarínico"], correctAnswer: 3 },
+                { id: 17, difficulty: 'Fácil', question: "Qual das seguintes ações é característica da função de 'repouso e digestão' parassimpática?", topic: "Função de \"Repouso e Digestão\"", options: ["Aumento da frequência cardíaca", "Dilatação da pupila", "Aumento da motilidade e secreções do TGI", "Liberação de glicose pelo fígado"], correctAnswer: 2 },
+                { id: 18, difficulty: 'Fácil', question: "Na divisão Parassimpática, os neurônios pré-ganglionares são ____ e os pós-ganglionares são ____.", topic: "Simpático vs. Parassimpático: Um Resumo", options: ["longos, curtos", "curtos, longos", "longos, longos", "curtos, curtos"], correctAnswer: 0 },
+                { id: 19, difficulty: 'Fácil', question: "Qual a importância do Nervo Vago (X) para a divisão parassimpática?", topic: "O Nervo Vago (Nervo X)", options: ["Inerva apenas a cabeça e o pescoço", "É o único nervo parassimpático", "Carrega cerca de 75% de todas as fibras parassimpáticas", "É responsável pela 'luta ou fuga'"], correctAnswer: 2 },
+                { id: 20, difficulty: 'Fácil', question: "Qual neurotransmissor é liberado pelo neurônio pós-ganglionar SIMPÁTICO na maioria dos órgãos-alvo?", topic: "Simpático vs. Parassimpático: Um Resumo", options: ["Acetilcolina", "Dopamina", "Norepinefrina", "Serotonina"], correctAnswer: 2 },
+                // === NÍVEL MÉDIO (20 Questões) ===
+                { id: 21, difficulty: 'Média', question: "Qual o principal objetivo do 'Balanço Autonômico' entre as divisões do SNA?", topic: "Controle Antagonista", options: ["Manter a homeostasia", "Acelerar o metabolismo", "Promover o crescimento muscular", "Aumentar a pressão arterial"], correctAnswer: 0 },
+                { id: 22, difficulty: 'Média', question: "Qual parte do tronco encefálico contém centros vitais para o controle direto da respiração e dos batimentos cardíacos?", topic: "Centros de Controle", options: ["Cerebelo", "Hipotálamo", "Bulbo e Ponte", "Tálamo"], correctAnswer: 2 },
+                { id: 23, difficulty: 'Média', question: "No controle tônico dos vasos sanguíneos, o que acontece se a frequência do sinal simpático diminuir?", topic: "Controle Tônico", options: ["Vasoconstrição", "Vasodilatação", "Nenhuma alteração", "Aumento da pressão arterial"], correctAnswer: 1 },
+                { id: 24, difficulty: 'Média', question: "Qual a principal característica da junção neuroefetora autonômica que permite influenciar uma grande área de tecido?", topic: "Junção Neuroefetora", options: ["Sinapses elétricas diretas", "A presença de muitos dendritos", "A presença de varicosidades ao longo do axônio", "O neurônio ser mielinizado"], correctAnswer: 2 },
+                { id: 25, difficulty: 'Média', question: "Qual é a principal diferença funcional entre um receptor ionotrópico e um metabotrópico?", topic: "Ionotrópicos vs. Metabotrópicos", options: ["Ionotrópicos são mais lentos", "Metabotrópicos são canais iônicos diretos", "Ionotrópicos são canais diretos, Metabotrópicos usam segundos mensageiros", "Apenas metabotrópicos se ligam a neurotransmissores"], correctAnswer: 2 },
+                { id: 26, difficulty: 'Média', question: "Receptores muscarínicos são um exemplo de qual tipo de mecanismo de receptor?", topic: "Receptores Colinérgicos: Muscarínicos", options: ["Canal iônico dependente de voltagem", "Receptor Ionotrópico", "Receptor Metabotrópico", "Transportador de recaptação"], correctAnswer: 2 },
+                { id: 27, difficulty: 'Média', question: "Qual receptor adrenérgico é o principal alvo para causar relaxamento do músculo liso dos brônquios (broncodilatação)?", topic: "Receptores Adrenérgicos: Alfa e Beta", options: ["Alfa-1 (α1)", "Alfa-2 (α2)", "Beta-1 (β1)", "Beta-2 (β2)"], correctAnswer: 3 },
+                { id: 28, difficulty: 'Média', question: "As células cromafins da medula suprarrenal são funcionalmente análogas a:", topic: "Medula Suprarrenal", options: ["Neurônios pré-ganglionares simpáticos", "Neurônios pós-ganglionares simpáticos", "Células da glia", "Neurônios parassimpáticos"], correctAnswer: 1 },
+                { id: 29, difficulty: 'Média', question: "A liberação de epinefrina pela medula suprarrenal na corrente sanguínea tem como efeito:", topic: "Medula Suprarrenal", options: ["Uma resposta rápida e de curta duração", "Uma resposta localizada no abdômen", "Reforçar e prolongar a resposta simpática", "Ativar a resposta de 'repouso e digestão'"], correctAnswer: 2 },
+                { id: 30, difficulty: 'Média', question: "O que permite que o sistema simpático atue em 'descarga em massa', ativando múltiplos órgãos simultaneamente?", topic: "Descarga em Massa", options: ["A lentidão de seus neurotransmissores", "A ausência de gânglios", "A ampla divergência dos neurônios pré-ganglionares", "O controle exclusivo pelo córtex"], correctAnswer: 2 },
+                { id: 31, difficulty: 'Média', question: "A ação da acetilcolina na junção neuroefetora parassimpática é rapidamente terminada pela enzima:", topic: "Neurotransmissores (Parassimpático)", options: ["Monoamina oxidase (MAO)", "COMT", "Acetilcolinesterase (AChE)", "Dopa descarboxilase"], correctAnswer: 2 },
+                { id: 32, difficulty: 'Média', question: "A ativação parassimpática nos pulmões causa:", topic: "Função de \"Repouso e Digestão\"", options: ["Broncodilatação", "Aumento da capacidade respiratória", "Broncoconstrição", "Diminuição do muco"], correctAnswer: 2 },
+                { id: 33, difficulty: 'Média', question: "Por que as respostas parassimpáticas são geralmente mais localizadas do que as simpáticas?", topic: "Controle Específico", options: ["Porque usam neurotransmissores mais lentos", "Devido à anatomia da via, com gânglios próximos ao alvo", "Porque são controladas por outra área do cérebro", "Porque não possuem gânglios"], correctAnswer: 1 },
+                { id: 34, difficulty: 'Média', question: "A capacidade de ativar a digestão sem afetar o coração é um exemplo de qual característica parassimpática?", topic: "Controle Específico", options: ["Controle antagonista", "Descarga em massa", "Controle tônico", "Controle específico e localizado"], correctAnswer: 3 },
+                { id: 35, difficulty: 'Média', question: "O 'tônus vagal' é um termo que descreve a influência parassimpática constante sobre qual órgão?", topic: "O Nervo Vago (Nervo X)", options: ["Fígado", "Intestino", "Pulmões", "Coração"], correctAnswer: 3 },
+                { id: 36, difficulty: 'Média', question: "Qual o efeito de um medicamento beta-bloqueador, como o propranolol?", topic: "Receptores Adrenérgicos: Alfa e Beta", options: ["Aumentar a frequência cardíaca", "Causar broncodilatação", "Bloquear os efeitos simpáticos no coração, reduzindo a frequência cardíaca", "Estimular a liberação de epinefrina"], correctAnswer: 2 },
+                { id: 37, difficulty: 'Média', question: "Receptores do tipo Muscarínico são as 'fechaduras' para a acetilcolina no órgão-alvo de qual divisão?", topic: "Simpático vs. Parassimpático: Um Resumo", options: ["Simpática", "Parassimpática", "Somática", "Ambas Simpática e Parassimpática"], correctAnswer: 1 },
+                { id: 38, difficulty: 'Média', question: "Apesar da maioria dos neurônios pós-ganglionares simpáticos liberarem NE, qual é a exceção notável para as glândulas sudoríparas?", topic: "Neurotransmissores (Simpático)", options: ["Eles liberam dopamina", "Eles liberam serotonina", "Eles liberam acetilcolina", "Eles não liberam neurotransmissores"], correctAnswer: 2 },
+                { id: 39, difficulty: 'Média', question: "Se o nervo vago de uma pessoa fosse cortado, o que aconteceria com sua frequência cardíaca de repouso?", topic: "O Nervo Vago (Nervo X)", options: ["Diminuiria drasticamente", "Permaneceria a mesma", "Aumentaria, pois o 'freio' parassimpático foi removido", "Iria variar aleatoriamente"], correctAnswer: 2 },
+                { id: 40, difficulty: 'Média', question: "A origem 'Craniossacral' e neurônios pré-ganglionares longos são características de qual sistema?", topic: "Simpático vs. Parassimpático: Um Resumo", options: ["Simpático", "Parassimpático", "Somático", "Ambos autonômicos"], correctAnswer: 1 },
+                // === NÍVEL DIFÍCIL (20 Questões) ===
+                { id: 41, difficulty: 'Difícil', question: "Um receptor que é ele mesmo um canal iônico, abrindo-se em resposta à ligação de um neurotransmissor, é classificado como:", topic: "Ionotrópicos vs. Metabotrópicos", options: ["Metabotrópico", "Adrenérgico", "Dependente de Proteína G", "Ionotrópico"], correctAnswer: 3 },
+                { id: 42, difficulty: 'Difícil', question: "Como a ação da Norepinefrina (NE) na fenda sináptica é primariamente terminada?", topic: "Neurotransmissores (Simpático)", options: ["Por difusão", "Por degradação enzimática pela AChE", "Por recaptação no terminal do axônio", "Por ação do sistema parassimpático"], correctAnswer: 2 },
+                { id: 43, difficulty: 'Difícil', question: "Nos gânglios autonômicos (simpáticos e parassimpáticos), o receptor colinérgico é sempre do tipo:", topic: "Receptores Colinérgicos: Nicotínicos", options: ["Muscarínico M1", "Muscarínico M2", "Nicotínico", "Adrenérgico"], correctAnswer: 2 },
+                { id: 44, difficulty: 'Difícil', question: "Por que a liberação de neurotransmissores a partir de varicosidades na junção neuroefetora é mais lenta e duradoura que na junção neuromuscular?", topic: "Junção Neuroefetora", options: ["Porque o neurotransmissor precisa se difundir por uma distância maior até os receptores", "Porque os potenciais de ação são mais lentos no SNA", "Porque não há enzimas para degradar o neurotransmissor", "Porque os receptores são menos sensíveis"], correctAnswer: 0 },
+                { id: 45, difficulty: 'Difícil', question: "Qual a função dos receptores alfa-2 (α2) localizados no próprio terminal do neurônio adrenérgico?", topic: "Receptores Adrenérgicos: Alfa e Beta", options: ["Aumentar a liberação de NE", "Funcionar como autorreceptores, inibindo a liberação adicional de NE", "Estimular a síntese de ACh", "Causar a recaptação de NE"], correctAnswer: 1 },
+                { id: 46, difficulty: 'Difícil', question: "Além do neurotransmissor principal, os neurônios autonômicos podem liberar outras substâncias que modulam a resposta, conhecidas como:", topic: "Classificação de Neurônios e Receptores", options: ["Hormônios secundários", "Íons moduladores", "Co-transmissores (ex: ATP, Neuropeptídeo Y)", "Fatores de crescimento"], correctAnswer: 2 },
+                { id: 47, difficulty: 'Difícil', question: "A maior especificidade do sistema parassimpático também se deve à rápida ação da AChE na sinapse. O que isso implica para a duração do sinal?", topic: "Controle Específico", options: ["O sinal é mais longo e sustentado", "O sinal é muito breve e localizado", "O sinal se espalha para tecidos vizinhos", "A duração do sinal é irrelevante"], correctAnswer: 1 },
+                { id: 48, difficulty: 'Difícil', question: "As células cromafins da medula suprarrenal têm a mesma origem embriológica que qual outra estrutura?", topic: "Medula Suprarrenal", options: ["Células musculares lisas", "Células do córtex suprarrenal", "Neurônios pós-ganglionares simpáticos (ambos da crista neural)", "Hepatócitos"], correctAnswer: 2 },
+                { id: 49, difficulty: 'Difícil', question: "Receptores beta-adrenérgicos (β1, β2, β3) tipicamente usam qual segundo mensageiro para transduzir seu sinal?", topic: "Receptores Adrenérgicos: Alfa e Beta", options: ["Íons de cálcio (Ca²⁺)", "Diacilglicerol (DAG)", "Monofosfato de adenosina cíclico (AMPc)", "Inositol trifosfato (IP3)"], correctAnswer: 2 },
+                { id: 50, difficulty: 'Difícil', question: "A atropina é uma droga que bloqueia os receptores muscarínicos. Qual seria um efeito esperado de seu uso?", topic: "Receptores Colinérgicos: Muscarínicos", options: ["Diminuição da frequência cardíaca", "Aumento da salivação e digestão", "Aumento da frequência cardíaca e secura na boca", "Contração da pupila"], correctAnswer: 2 },
+                { id: 51, difficulty: 'Difícil', question: "Receptores muscarínicos M2, no coração, causam inibição (↓ FC), enquanto receptores M3, no músculo liso, causam contração. Isso ilustra que:", topic: "Receptores Colinérgicos: Muscarínicos", options: ["ACh é sempre inibitória", "A resposta a um neurotransmissor depende do subtipo de receptor", "Receptores muscarínicos são todos iguais", "O SNA não tem controle fino"], correctAnswer: 1 },
+                { id: 52, difficulty: 'Difícil', question: "Qual é a única localização onde tanto neurônios simpáticos quanto parassimpáticos liberam Acetilcolina?", topic: "Simpático vs. Parassimpático: Um Resumo", options: ["Na medula suprarrenal", "Nos músculos esqueléticos", "No gânglio autonômico", "No músculo cardíaco"], correctAnswer: 2 },
+                { id: 53, difficulty: 'Difícil', question: "A fenilefrina, um descongestionante nasal comum, atua como um agonista de qual receptor para causar vasoconstrição?", topic: "Receptores Adrenérgicos: Alfa e Beta", options: ["Beta-2 (β2)", "Alfa-1 (α1)", "Muscarínico (M3)", "Nicotínico"], correctAnswer: 1 },
+                { id: 54, difficulty: 'Difícil', question: "Considerando as diferenças anatômicas (tamanho e ramificação dos neurônios), qual divisão é mais adequada para uma resposta rápida e generalizada?", topic: "Simpático vs. Parassimpático: Um Resumo", options: ["Parassimpática, devido aos neurônios pós-ganglionares curtos", "Simpática, devido aos pré-ganglionares curtos e ramificados na cadeia paravertebral", "Ambas são igualmente rápidas e generalizadas", "Nenhuma, essa função é do sistema somático"], correctAnswer: 1 },
+                { id: 55, difficulty: 'Difícil', question: "A síndrome de Horner (ptose, miose, anidrose) é causada por uma lesão em qual parte do SNA?", topic: "Origem e Anatomia (Simpático)", options: ["Nervo Vago", "Cadeia simpática cervical", "Gânglios parassimpáticos sacrais", "Medula suprarrenal"], correctAnswer: 1 },
+                { id: 56, difficulty: 'Difícil', question: "Por que a epinefrina, liberada pela suprarrenal, tem um efeito broncodilatador mais potente que a norepinefrina liberada localmente?", topic: "Receptores Adrenérgicos: Alfa e Beta", options: ["Porque a epinefrina é mais estável no sangue", "Porque a epinefrina tem maior afinidade por receptores beta-2 (β2) nos brônquios", "Porque a norepinefrina não alcança os pulmões", "Porque a epinefrina bloqueia os receptores alfa-1"], correctAnswer: 1 },
+                { id: 57, difficulty: 'Difícil', question: "Qual o papel do cálcio intracelular na resposta mediada por receptores Alfa-1 (α1)?", topic: "Receptores Adrenérgicos: Alfa e Beta", options: ["Ele inibe a contração muscular", "Ele atua como um segundo mensageiro que desencadeia a contração do músculo liso", "Ele é bombeado para fora da célula", "Ele ativa a produção de AMPc"], correctAnswer: 1 },
+                { id: 58, difficulty: 'Difícil', question: "Um reflexo autonômico, como o barorreflexo, envolve quais componentes em ordem?", topic: "Estrutura Geral do SNA", options: ["Via eferente -> Integrador -> Via aferente -> Receptor", "Receptor -> Via aferente -> Centro integrador -> Via eferente -> Efetor", "Efetor -> Via eferente -> Integrador -> Via aferente -> Receptor", "Centro integrador -> Receptor -> Efetor"], correctAnswer: 1 },
+                { id: 59, difficulty: 'Difícil', question: "O que é 'divergência' no contexto da anatomia simpática?", topic: "Descarga em Massa", options: ["Um neurônio pré-ganglionar faz sinapse com apenas um neurônio pós-ganglionar", "Múltiplos neurônios pré-ganglionares convergem para um único neurônio pós-ganglionar", "Um neurônio pré-ganglionar faz sinapse com múltiplos neurônios pós-ganglionares, permitindo uma resposta ampla", "Os sinais viajam em direções opostas"], correctAnswer: 2 },
+                { id: 60, difficulty: 'Difícil', question: "Apesar de serem antagônicos na maioria das funções, como o simpático e parassimpático atuam na função sexual masculina?", topic: "Controle Antagonista", options: ["Ambos são inibitórios", "Apenas o simpático atua", "Eles trabalham em sinergia: parassimpático para ereção, simpático para ejaculação", "Apenas o parassimpático atua"], correctAnswer: 2 },
             ];
 
             const startBtn = document.getElementById('quiz-start-btn');
             const restartBtn = document.getElementById('restart-quiz-btn');
+            const resetBtn = document.getElementById('reset-progress-btn'); 
+            const startArea = document.getElementById('start-area');
             const quizContainer = document.getElementById('quiz-container');
             const resultsContainer = document.getElementById('quiz-results');
             const questionEl = document.getElementById('quiz-question');
             const optionsEl = document.getElementById('quiz-options');
-            const timerEl = document.getElementById('quiz-timer');
+            const questionCounterDisplay = document.getElementById('question-counter-display');
+            const progressBarFill = document.getElementById('progress-bar-fill');
+            const progressLabel = document.getElementById('progress-label');
+            const timerDisplay = document.getElementById('timer-display');
+            const topicIdMap = {};
             
             let currentQuestionIndex = 0;
             let score = 0;
             let missedTopics = [];
-            let timerInterval;
             let activeQuiz = [];
-            let questionWeights = [];
-            const topicIdMap = {};
+            let correctlyAnsweredIds = [];
 
-            function initializeQuizSystem() {
-                questionWeights = new Array(questionBank.length).fill(10); // Default weight
+            let questionTimer;
+            let countdownInterval;
+            const TIMER_DURATION = 30; 
 
-                document.querySelectorAll('.topic-card').forEach(card => {
-                    const summaryText = card.querySelector('.summary').textContent.trim();
-                    topicIdMap[summaryText] = card.id;
-                });
-                
-                // Add specific mappings for topics with duplicate names in the bank
+            function initializeTopicMap() {
+                // Mapeia os tópicos específicos para os IDs dos cards
+                topicIdMap["Simpático vs. Parassimpático: Um Resumo"] = 'topic-comparativo';
+                topicIdMap["Estrutura Geral do SNA"] = 'topic-estrutura-geral-do-sna';
+                topicIdMap["Controle Antagonista"] = 'topic-controle-antagonista';
+                topicIdMap["Centros de Controle"] = 'topic-centros-de-controle';
+                topicIdMap["Controle Tônico"] = 'topic-controle-tonico';
+                topicIdMap["Junção Neuroefetora"] = 'topic-juncao-neuroefetora';
                 topicIdMap["Origem e Anatomia (Simpático)"] = 'topic-origem-e-anatomia-simpatico';
                 topicIdMap["Neurotransmissores (Simpático)"] = 'topic-neurotransmissores-simpatico';
+                topicIdMap["Medula Suprarrenal"] = 'topic-medula-suprarrenal';
+                topicIdMap["Resposta de \"Luta ou Fuga\""] = 'topic-resposta-de-luta-ou-fuga';
+                topicIdMap["Descarga em Massa"] = 'topic-descarga-em-massa';
                 topicIdMap["Origem e Anatomia (Parassimpático)"] = 'topic-origem-e-anatomia-parassimpatico';
                 topicIdMap["Neurotransmissores (Parassimpático)"] = 'topic-neurotransmissores-parassimpatico';
                 topicIdMap["Função de \"Repouso e Digestão\""] = 'topic-funcao-de-repouso-e-digestao';
-                topicIdMap["Resposta de \"Luta ou Fuga\""] = 'topic-resposta-de-luta-ou-fuga';
+                topicIdMap["Controle Específico"] = 'topic-controle-especifico';
                 topicIdMap["O Nervo Vago (Nervo X)"] = 'topic-o-nervo-vago-nervo-x';
-                topicIdMap["Receptores Colinérgicos"] = 'topic-receptores-colinergicos';
+                // Novos Mapeamentos
+                topicIdMap["Classificação de Neurônios e Receptores"] = 'topic-classificacao-neuronios-receptores';
+                topicIdMap["Receptores Colinérgicos: Nicotínicos"] = 'topic-receptores-colinergicos-nicotinicos';
+                topicIdMap["Receptores Colinérgicos: Muscarínicos"] = 'topic-receptores-colinergicos-muscarinicos';
+                topicIdMap["Receptores Adrenérgicos: Alfa e Beta"] = 'topic-receptores-adrenergicos';
+                topicIdMap["Ionotrópicos vs. Metabotrópicos"] = 'topic-ionotropicos-metabotropicos';
+                topicIdMap["Gânglios Autonômicos"] = 'topic-ganglios-autonomicos';
+                topicIdMap["Resumo dos Receptores do SNA"] = 'topic-resumo-receptores';
             }
 
-            function startQuiz() {
-                activeQuiz = [];
-                let availableQuestions = [...questionBank];
+
+            function loadProgress() {
+                const savedProgress = localStorage.getItem('snaquiz_correctlyAnsweredIds');
+                correctlyAnsweredIds = savedProgress ? JSON.parse(savedProgress) : [];
+                updateProgressBar();
+                checkCompletion();
+            }
+
+            function saveProgress() {
+                localStorage.setItem('snaquiz_correctlyAnsweredIds', JSON.stringify(correctlyAnsweredIds));
+            }
+
+            function updateProgressBar() {
+                const totalQuestions = questionBank.length;
+                const answeredCount = correctlyAnsweredIds.length;
+                const percentage = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
                 
-                const quizSize = 12;
-                const weightedPool = [];
-                availableQuestions.forEach(q => {
-                    const weight = questionWeights[q.originalIndex];
-                    for (let i = 0; i < weight; i++) {
-                        weightedPool.push(q);
-                    }
-                });
+                progressBarFill.style.width = `${percentage}%`;
+                progressBarFill.textContent = `${percentage}%`;
+                progressLabel.textContent = `Progresso: ${answeredCount} de ${totalQuestions} questões dominadas`;
+            }
 
-                while(activeQuiz.length < quizSize && weightedPool.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * weightedPool.length);
-                    const chosenQuestion = weightedPool[randomIndex];
-
-                    if (!activeQuiz.some(q => q.originalIndex === chosenQuestion.originalIndex)) {
-                        activeQuiz.push(chosenQuestion);
-                    }
-                    // Remove all instances of the chosen question from the pool to ensure uniqueness
-                    for (let i = weightedPool.length - 1; i >= 0; i--) {
-                        if (weightedPool[i].originalIndex === chosenQuestion.originalIndex) {
-                            weightedPool.splice(i, 1);
-                        }
-                    }
+            function checkCompletion() {
+                const availableQuestions = questionBank.filter(q => !correctlyAnsweredIds.includes(q.id));
+                if (availableQuestions.length === 0) {
+                    startBtn.disabled = true;
+                    startBtn.textContent = "Parabéns, você dominou tudo!";
+                } else {
+                    startBtn.disabled = false;
+                    startBtn.textContent = "Começar Quiz";
+                }
+            }
+            
+            function startQuiz() {
+                const availableQuestions = questionBank.filter(q => !correctlyAnsweredIds.includes(q.id));
+                
+                if (availableQuestions.length === 0) {
+                     checkCompletion();
+                     return;
                 }
 
+                activeQuiz = [...availableQuestions].sort(() => 0.5 - Math.random()).slice(0, 15); // Quiz com 15 questões
+                
                 currentQuestionIndex = 0;
                 score = 0;
                 missedTopics = [];
-                startBtn.classList.add('hidden');
+                
+                startArea.classList.add('hidden');
                 resultsContainer.classList.add('hidden');
                 quizContainer.classList.remove('hidden');
                 showQuestion();
+            }
+
+            function startTimer() {
+                clearTimeout(questionTimer);
+                clearInterval(countdownInterval);
+
+                let timeLeft = TIMER_DURATION;
+                timerDisplay.textContent = timeLeft;
+                timerDisplay.className = 'absolute top-10 left-10 w-11 h-11 rounded-full bg-white/40 border-2 border-slate-600 flex items-center justify-center text-base font-bold text-slate-800 transition-all duration-300 ease-in-out';
+                
+                countdownInterval = setInterval(() => {
+                    timeLeft--;
+                    timerDisplay.textContent = timeLeft;
+                    if (timeLeft <= 10 && timeLeft > 5) {
+                        timerDisplay.classList.add('warning');
+                    } else if (timeLeft <= 5) {
+                        timerDisplay.classList.add('danger');
+                    }
+                }, 1000);
+
+                questionTimer = setTimeout(() => {
+                    clearInterval(countdownInterval);
+                    handleTimeUp();
+                }, TIMER_DURATION * 1000);
+            }
+
+            function handleTimeUp() {
+                 selectAnswer(null);
             }
 
             function showQuestion() {
@@ -1193,6 +1515,17 @@
                     return;
                 }
                 const questionData = activeQuiz[currentQuestionIndex];
+
+                questionCounterDisplay.textContent = `${currentQuestionIndex + 1}/${activeQuiz.length}`;
+                questionCounterDisplay.classList.remove('facil-bg', 'media-bg', 'dificil-bg');
+                if (questionData.difficulty === 'Fácil') {
+                    questionCounterDisplay.classList.add('facil-bg');
+                } else if (questionData.difficulty === 'Média') {
+                    questionCounterDisplay.classList.add('media-bg');
+                } else if (questionData.difficulty === 'Difícil') {
+                    questionCounterDisplay.classList.add('dificil-bg');
+                }
+
                 questionEl.textContent = questionData.question;
                 
                 questionData.options.forEach((option, index) => {
@@ -1203,25 +1536,12 @@
                     li.addEventListener('click', selectAnswer);
                     optionsEl.appendChild(li);
                 });
-                
                 startTimer();
             }
 
-            function startTimer() {
-                let timeLeft = 30;
-                timerEl.textContent = timeLeft;
-                timerInterval = setInterval(() => {
-                    timeLeft--;
-                    timerEl.textContent = timeLeft;
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        selectAnswer(null); // Time's up
-                    }
-                }, 1000);
-            }
-
             function resetState() {
-                clearInterval(timerInterval);
+                clearTimeout(questionTimer);
+                clearInterval(countdownInterval);
                 while(optionsEl.firstChild) {
                     optionsEl.removeChild(optionsEl.firstChild);
                 }
@@ -1229,11 +1549,14 @@
             }
             
             function selectAnswer(e) {
-                clearInterval(timerInterval);
+                clearTimeout(questionTimer);
+                clearInterval(countdownInterval);
+
                 const selectedOption = e ? e.target : null;
+                Array.from(optionsEl.children).forEach(option => option.removeEventListener('click', selectAnswer));
+
                 const currentQuestion = activeQuiz[currentQuestionIndex];
                 const correctIndex = currentQuestion.correctAnswer;
-                const originalIndex = currentQuestion.originalIndex;
                 let isCorrect = false;
 
                 if(selectedOption && parseInt(selectedOption.dataset.index) === correctIndex) {
@@ -1251,14 +1574,17 @@
                     score++;
                     if(selectedOption) selectedOption.classList.add('correct-answer');
                     document.body.classList.add('correct-bg');
-                    questionWeights[originalIndex] = Math.max(1, Math.floor(questionWeights[originalIndex] / 2));
+                    if (!correctlyAnsweredIds.includes(currentQuestion.id)) {
+                        correctlyAnsweredIds.push(currentQuestion.id);
+                        saveProgress();
+                        updateProgressBar();
+                    }
                 } else {
                     if (selectedOption) {
                         selectedOption.classList.add('incorrect-answer');
                     }
                     missedTopics.push(currentQuestion.topic);
                     document.body.classList.add('incorrect-bg');
-                    questionWeights[originalIndex] = Math.min(50, questionWeights[originalIndex] * 2);
                 }
 
                 setTimeout(() => {
@@ -1268,7 +1594,7 @@
                     } else {
                         showResults();
                     }
-                }, 2000); 
+                }, 2500); 
             }
             
             function showResults() {
@@ -1286,42 +1612,57 @@
                 
                 if (missedTopics.length > 0) {
                      const uniqueMissedTopics = [...new Set(missedTopics)];
-                     uniqueMissedTopics.forEach(topic => {
-                        const cardId = topicIdMap[topic];
-                        if (!cardId) {
-                            console.warn(`Could not find ID for topic: "${topic}"`);
-                            return;
-                        };
-
-                        const bubble = document.createElement('li');
-                        bubble.textContent = topic;
-                        bubble.classList.add('missed-topic-bubble');
-
-                        bubble.addEventListener('click', (e) => {
-                            const targetCard = document.getElementById(cardId);
-                            if (targetCard) {
-                                e.currentTarget.classList.add('visited-topic');
-                                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                if (!targetCard.classList.contains('is-open')) {
-                                    toggleAccordion(targetCard);
-                                }
-                            }
-                        });
-
-                        missedListEl.appendChild(bubble);
+                     uniqueMissedTopics.forEach(topicName => {
+                        const cardId = topicIdMap[topicName];
+                        if (cardId) {
+                            const bubble = document.createElement('li');
+                            bubble.textContent = topicName;
+                            bubble.classList.add('missed-topic-bubble');
+                            bubble.addEventListener('click', (e) => {
+                                 const targetCard = document.getElementById(cardId);
+                                 if (targetCard) {
+                                     e.currentTarget.classList.add('visited-topic');
+                                     targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                     if (!targetCard.classList.contains('is-open')) {
+                                         toggleAccordion(targetCard);
+                                     }
+                                 }
+                            });
+                            missedListEl.appendChild(bubble);
+                        }
                      });
                 } else {
                      const congrats = document.createElement('li');
-                     congrats.textContent = "Parabéns, você acertou tudo!";
-                     congrats.classList.add('text-green-600', 'font-semibold');
+                     if (activeQuiz.length > 0 && score === activeQuiz.length) {
+                         congrats.textContent = "Parabéns, você acertou tudo!";
+                         congrats.classList.add('text-green-600', 'font-semibold');
+                     } else {
+                         congrats.textContent = "Você não errou nenhuma questão com tópico associado. Bom trabalho!";
+                     }
                      missedListEl.appendChild(congrats);
                 }
+                 checkCompletion();
+            }
+            
+            function resetProgress() {
+                localStorage.removeItem('snaquiz_correctlyAnsweredIds');
+                correctlyAnsweredIds = [];
+                updateProgressBar();
+                checkCompletion();
             }
 
-            initializeQuizSystem();
             startBtn.addEventListener('click', startQuiz);
-            restartBtn.addEventListener('click', startQuiz);
+            restartBtn.addEventListener('click', () => {
+                resultsContainer.classList.add('hidden');
+                startArea.classList.remove('hidden');
+                checkCompletion();
+            });
+            resetBtn.addEventListener('click', resetProgress);
+            
+            initializeTopicMap();
+            loadProgress();
         });
     </script>
 </body>
 </html>
+
